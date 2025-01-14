@@ -11,7 +11,7 @@ const Navbar = () => {
         signOutUser()
           .then(() => {
             // Handle successful logout
-            
+
           })
           .catch((error) => {
             console.error('Logout error:', error);
@@ -24,7 +24,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <Building2 className="h-8 w-8 text-blue-500" />
-              <span className="text-xl font-bold">Houszez</span>
+              <span className="text-xl font-bold uppercase">Houzez</span>
             </Link>
           </div>
 
