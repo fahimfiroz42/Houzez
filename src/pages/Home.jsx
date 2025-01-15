@@ -1,6 +1,7 @@
 
 import Advertisement from '../components/Advertisement';
 import Banner from '../components/Banner';
+import LatestReview from '../components/LatestReview';
 import WhyChooseUs from '../components/WhyChooseUs';
 
 const Home = () => {
@@ -8,6 +9,7 @@ const Home = () => {
         <div>
             <Banner/>
             <Advertisement/>
+            <LatestReview/>
             <WhyChooseUs/>
         </div>
     );

@@ -5,6 +5,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Error from '../pages/Error';
 import PropertyDetails from '../pages/PropertyDetails';
+import DashboardLayout from '../layouts/DashboardLayout';
 
 const Routes = createBrowserRouter([
     {
@@ -30,6 +31,16 @@ const Routes = createBrowserRouter([
         }
       ]
     },
+
+    {
+        path:'/dashboard',
+        element:<DashboardLayout/>,
+        children:[
+            {
+                
+            }
+        ]
+    }
   ]);
 
 export default Routes;
