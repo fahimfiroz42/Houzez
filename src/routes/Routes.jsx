@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Error from '../pages/Error';
+import PropertyDetails from '../pages/PropertyDetails';
 
 const Routes = createBrowserRouter([
     {
@@ -22,6 +23,10 @@ const Routes = createBrowserRouter([
         {
             path:'/register',
             element:<Register/>
+        },
+        {
+            path:'/property/:id',
+            element:<PropertyDetails/>
         }
       ]
     },

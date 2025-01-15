@@ -1,0 +1,264 @@
+import { useState } from 'react';
+import { MapPin, DollarSign, Shield, Heart, Star, User } from 'lucide-react';
+import toast from 'react-hot-toast';
+
+
+const PropertyDetails = () => {
+ 
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [review, setReview] = useState('');
+  const [rating, setRating] = useState(5);
+
+  const property = {
+    id: 1,
+    title: "Luxury Villa with Pool",
+    description: "This stunning luxury villa offers the perfect blend of modern design and comfortable living. Featuring a large pool, spacious rooms, and state-of-the-art amenities.",
+    location: "Beverly Hills, CA",
+    price: {
+      min: 2500000,
+      max: 3000000
+    },
+    images: [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3",
+      "https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?ixlib=rb-4.0.3"
+    ],
+    features: [
+      "5 Bedrooms",
+      "6 Bathrooms",
+      "Swimming Pool",
+      "Garden",
+      "3 Car Garage",
+      "Smart Home System"
+    ],
+    agent: {
+      name: "John Doe",
+      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3",
+      phone: "+1 234 567 890",
+      email: "john.doe@realestate.com"
+    },
+    verified: true
+  };
+
+  const reviews = [
+    {
+      id: 1,
+      user: {
+        name: "Emily Brown",
+        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3"
+      },
+      rating: 5,
+      comment: "Amazing property! The amenities are top-notch and the location is perfect.",
+      date: "2024-02-15"
+    },
+    // Add more reviews
+  ];
+
+  const handleAddToWishlist = () => {
+    toast.success('Added to wishlist!');
+  };
+
+  const handleSubmitReview = (e) => {
+    e.preventDefault();
+    toast.success('Review submitted successfully!');
+    setShowReviewModal(false);
+    setReview('');
+    setRating(5);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="container mx-auto px-4">
+        {/* Property Header */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">{property.title}</h1>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center text-gray-600">
+                  <MapPin className="w-4 h-4 mr-1" />
+                  <span>{property.location}</span>
+                </div>
+                {property.verified && (
+                  <div className="flex items-center text-green-500">
+                    <Shield className="w-4 h-4 mr-1" />
+                    <span>Verified</span>
+                  </div>
+                )}
+              </div>
+            </div>
+            <button
+              onClick={handleAddToWishlist}
+              className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+            >
+              <Heart className="w-4 h-4" />
+              Add to Wishlist
+            </button>
+          </div>
+        </div>
+
+        {/* Property Images */}
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <img
+            src={property.images[0]}
+            alt={property.title}
+            className="w-full h-96 object-cover rounded-lg"
+          />
+          <div className="grid grid-cols-2 gap-4">
+            {property.images.slice(1).map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt={`${property.title} ${index + 2}`}
+                className="w-full h-44 object-cover rounded-lg"
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Property Details */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          <div className="md:col-span-2">
+            <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+              <h2 className="text-2xl font-bold mb-4">Description</h2>
+              <p className="text-gray-600 mb-6">{property.description}</p>
+              
+              <h3 className="text-xl font-bold mb-4">Features</h3>
+              <ul className="grid grid-cols-2 gap-4">
+                {property.features.map((feature, index) => (
+                  <li key={index} className="flex items-center text-gray-600">
+                    <Shield className="w-4 h-4 mr-2 text-blue-500" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Reviews Section */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Reviews</h2>
+                <button
+                  onClick={() => setShowReviewModal(true)}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                >
+                  Add Review
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {reviews.map((review) => (
+                  <div key={review.id} className="border-b pb-6">
+                    <div className="flex items-center gap-4 mb-2">
+                      <img
+                        src={review.user.image}
+                        alt={review.user.name}
+                        className="w-10 h-10 rounded-full"
+                      />
+                      <div>
+                        <h4 className="font-semibold">{review.user.name}</h4>
+                        <div className="flex items-center">
+                          {[...Array(review.rating)].map((_, i) => (
+                            <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-gray-600">{review.comment}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Agent Information */}
+          <div className="bg-white rounded-lg shadow-md p-6 h-fit">
+            <div className="text-center mb-6">
+              <img
+                src={property.agent.image}
+                alt={property.agent.name}
+                className="w-24 h-24 rounded-full mx-auto mb-4"
+              />
+              <h3 className="text-xl font-bold">{property.agent.name}</h3>
+              <p className="text-gray-600">Real Estate Agent</p>
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Price Range:</span>
+                <span className="font-semibold">
+                  ${property.price.min.toLocaleString()} - ${property.price.max.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Phone:</span>
+                <span className="font-semibold">{property.agent.phone}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600">Email:</span>
+                <span className="font-semibold">{property.agent.email}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Review Modal */}
+      {showReviewModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold mb-4">Write a Review</h3>
+            <form onSubmit={handleSubmitReview}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Rating
+                </label>
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setRating(star)}
+                      className={`${
+                        star <= rating ? 'text-yellow-400' : 'text-gray-300'
+                      }`}
+                    >
+                      <Star className="w-6 h-6 fill-current" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Your Review
+                </label>
+                <textarea
+                  value={review}
+                  onChange={(e) => setReview(e.target.value)}
+                  className="w-full border border-gray-300 rounded-md p-2 h-32"
+                  required
+                />
+              </div>
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => setShowReviewModal(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                >
+                  Submit Review
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default PropertyDetails;
