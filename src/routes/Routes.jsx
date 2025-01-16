@@ -21,6 +21,7 @@ import ManageUsers from '../pages/dashboard/admin/ManageUsers';
 import ManageReviews from '../pages/dashboard/admin/ManageReviews';
 import AdvertiseProperty from '../pages/dashboard/admin/AdvertiseProperty';
 import AllProperties from '../pages/Allproperties';
+import MakeOffer from '../pages/dashboard/user/MakeOffer';
 
 const Routes = createBrowserRouter([
     {
@@ -63,6 +64,11 @@ const Routes = createBrowserRouter([
       {
         path: 'user/wishlist',
         element: <Wishlist />,
+      },
+      {
+        path:'user/make-offer/:id',
+        element:<MakeOffer/>
+
       },
       {
         path: 'user/property-bought',
