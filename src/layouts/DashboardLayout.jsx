@@ -19,7 +19,7 @@ const DashboardLayout = () => {
             isOpen ? 'translate-x-0' : '-translate-x-full'
           } fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static`}
         >
-          <div className="min-h-screen flex flex-col">
+          <div className="min-h-screen flex flex-col ">
             <div className="p-4 border-b">
               <h2 className="text-xl font-semibold">Dashboard</h2>
             </div>
@@ -181,11 +181,7 @@ const DashboardLayout = () => {
 
                   <Link
                     to="/"
-                    className={`block p-2  rounded ${
-                      location.pathname === '/dashboard/admin/profile'
-                        ? 'bg-blue-500 text-white'
-                        : 'hover:bg-gray-100'
-                    }`}
+                    className={`block p-2 rounded hover:bg-gray-100 `}
                   >
                     Home
                   </Link>
@@ -194,7 +190,7 @@ const DashboardLayout = () => {
         </aside>
 
         {/* Main content */}
-        <div className="flex-1">
+        <div className="flex-1 ">
           <header className="bg-white shadow-sm lg:hidden">
             <div className="px-4 py-2">
               <button
@@ -205,7 +201,7 @@ const DashboardLayout = () => {
               </button>
             </div>
           </header>
-          <main className="p-6">
+          <main className="p-6 ">
             <Outlet />
           </main>
         </div>
