@@ -20,6 +20,7 @@ import ManageProperties from '../pages/dashboard/admin/ManageProperties';
 import ManageUsers from '../pages/dashboard/admin/ManageUsers';
 import ManageReviews from '../pages/dashboard/admin/ManageReviews';
 import AdvertiseProperty from '../pages/dashboard/admin/AdvertiseProperty';
+import AllProperties from '../pages/Allproperties';
 
 const Routes = createBrowserRouter([
     {
@@ -42,6 +43,10 @@ const Routes = createBrowserRouter([
         {
             path:'/property/:id',
             element:<PropertyDetails/>
+        },
+        {
+            path:'/all-properties',
+            element:<AllProperties/>
         }
       ]
     },
