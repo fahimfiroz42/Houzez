@@ -58,6 +58,10 @@ const Routes = createBrowserRouter([
         children:[
            // User routes
       {
+        index: true,
+        element: <UserProfile />,
+      },
+      {
         path: 'user/profile',
         element: <UserProfile />,
       },
