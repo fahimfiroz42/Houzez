@@ -5,11 +5,12 @@ import { Building2, Mail, Lock, User, Camera } from 'lucide-react';
 ;
 import toast from 'react-hot-toast';
 import { AuthContext } from '../AuthPovider/AuthPovider';
+import axios from 'axios';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [preview, setPreview] = useState(null); // To preview the uploaded photo
-  const { registerUser, updateUser } =useContext(AuthContext);
+  const [preview, setPreview] = useState(null); 
+  const { registerUser, updateUser,signOutUser } =useContext(AuthContext);
   const navigate = useNavigate();
 
   const {
@@ -23,31 +24,32 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     try {
-      // Handle photo upload logic here
-      const file = data.photo[0];
+   
+      const image = data.photo[0];
       let photoURL = '';
-
-      if (file) {
+  
+      if (image) {
         const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'your_upload_preset'); // Replace with your actual Cloudinary preset or similar
-        formData.append('folder', 'user_photos'); // Optional: Specify a folder
+        formData.append('image', image);
+        
 
-        const response = await fetch('https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', {
-          method: 'POST',
-          body: formData,
-        });
+        const {data} = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_api_key}`,formData );
 
-        const fileData = await response.json();
-        photoURL = fileData.secure_url; // Get the uploaded photo URL
+      
+
+        photoURL = data.data.display_url;
+        
+     
       }
 
       // Create user and update profile
       await registerUser(data.email, data.password);
       await updateUser(data.name, photoURL);
+       
+      toast.success('Successfully registered! please login to continue.');
 
-      toast.success('Successfully registered!');
-      navigate('/');
+      signOutUser()
+      navigate('/login');
     } catch (error) {
       console.error(error);
       toast.error('Failed to register');
