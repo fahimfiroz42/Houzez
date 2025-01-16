@@ -1,18 +1,40 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { AuthContext } from "../../../AuthPovider/AuthPovider";
 
-const MakeOffer = ({ properties, user }) => {
+const MakeOffer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const {user}=useContext(AuthContext)
+ 
+  const [offerAmount, setOfferAmount] = useState("");
+  const [buyingDate, setBuyingDate] = useState("");
+
+  const properties=[
+    {
+        id: 1,
+        image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
+        title: "Luxury Villa with Pool",
+        location: "Beverly Hills, CA",
+        price: {
+          min: 2500000,
+          max: 3000000
+        },
+        verified: true,
+        agent: {
+          name: "John Doe",
+          image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3"
+        }
+      }
+
+  ]
 
   const property = properties.find((p) => p.id === parseInt(id));
   if (!property) {
     return <p>Property not found</p>;
   }
 
-  const [offerAmount, setOfferAmount] = useState("");
-  const [buyingDate, setBuyingDate] = useState("");
 
   const handleOfferSubmit = () => {
     // Validation for user role
@@ -36,7 +58,7 @@ const MakeOffer = ({ properties, user }) => {
       location: property.location,
       agentName: property.agent.name,
       buyerEmail: user.email,
-      buyerName: user.name,
+      buyerName: user.displayName,
       offerAmount,
       buyingDate,
       status: "pending",
@@ -63,7 +85,7 @@ const MakeOffer = ({ properties, user }) => {
             type="text"
             value={property.title}
             readOnly
-            className="w-full border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 rounded-md p-2"
           />
         </div>
 
@@ -73,7 +95,7 @@ const MakeOffer = ({ properties, user }) => {
             type="text"
             value={property.location}
             readOnly
-            className="w-full border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 rounded-md p-2"
           />
         </div>
 
@@ -83,7 +105,7 @@ const MakeOffer = ({ properties, user }) => {
             type="text"
             value={property.agent.name}
             readOnly
-            className="w-full border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 rounded-md p-2"
           />
         </div>
 
@@ -93,17 +115,17 @@ const MakeOffer = ({ properties, user }) => {
             type="email"
             value={user.email}
             readOnly
-            className="w-full border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 rounded-md p-2"
           />
         </div>
 
         <div className="mb-4">
-          <label className="block font-medium mb-1">Buyer Name</label>
+          <label className="block  font-medium mb-1">Buyer Name</label>
           <input
             type="text"
-            value={user.name}
+            value={user.displayName}
             readOnly
-            className="w-full border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 rounded-md p-2"
           />
         </div>
 
@@ -115,7 +137,7 @@ const MakeOffer = ({ properties, user }) => {
             value={offerAmount}
             onChange={(e) => setOfferAmount(parseInt(e.target.value))}
             placeholder={`Between $${property.price.min} and $${property.price.max}`}
-            className="w-full border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 rounded-md p-2"
           />
         </div>
 
@@ -126,7 +148,7 @@ const MakeOffer = ({ properties, user }) => {
             type="date"
             value={buyingDate}
             onChange={(e) => setBuyingDate(e.target.value)}
-            className="w-full border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 rounded-md p-2"
           />
         </div>
 

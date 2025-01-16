@@ -1,8 +1,11 @@
 import { MapPin, DollarSign, Shield, Trash2, CreditCard } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Wishlist = () => {
+
+    const navigate =useNavigate()
   const [wishlistItems, setWishlistItems] = useState([
     {
       id: 1,
@@ -25,11 +28,14 @@ const Wishlist = () => {
   const handleRemove = (id) => {
     setWishlistItems(items => items.filter(item => item.id !== id));
     toast.success('Removed from wishlist');
+  
   };
 
   const handleMakeOffer = (id) => {
     // Navigate to offer page or show modal
     toast.success('Redirecting to make an offer...');
+    navigate(`/dashboard/user/make-offer/${id}`);
+    
   };
 
   return (
