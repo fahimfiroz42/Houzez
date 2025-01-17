@@ -1,14 +1,14 @@
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Building2, Mail, Lock } from 'lucide-react';
+import { Building2, Mail, Lock, Disc3 } from 'lucide-react';
 
 import toast from 'react-hot-toast';
 import { AuthContext } from '../AuthPovider/AuthPovider';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { loginUser,googleLogin } =useContext(AuthContext);
+  const { loginUser,googleLogin,loading } =useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
@@ -132,7 +132,9 @@ const Login = () => {
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Sign in
+                {
+                     loading ? <Disc3 className='w-5 h-5 animate-spin' />  : 'Sign in'
+                }
               </button>
             </div>
           </form>

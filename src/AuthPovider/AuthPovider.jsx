@@ -3,6 +3,7 @@ import { createContext, useEffect, useState } from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../Firebase/firebase.config";
+import axios from "axios";
 
 export const AuthContext=createContext()
 const AuthContextProvider = ({children}) => {
@@ -54,8 +55,20 @@ const AuthContextProvider = ({children}) => {
 
     useEffect(()=>{
         const unsubscribe=onAuthStateChanged(auth,currentUser=>{
-            if(currentUser){
+            if(currentUser?.email){
                 setUser(currentUser)
+
+                axios.post(`http://localhost:9000/users/${currentUser?.email}`,{       name:currentUser?.displayName,
+                    image:currentUser?.photoURL,
+                    email:currentUser?.email,
+                    role:'user'
+                
+                })
+                .then(res=>{
+                    console.log(res.data)
+                })
+
+
                 setLoading(false)
                 
             }

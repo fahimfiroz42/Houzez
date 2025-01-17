@@ -4,6 +4,8 @@ import { Building2, MapPin, DollarSign, Upload, User, Mail } from 'lucide-react'
 
 import toast from 'react-hot-toast';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const AddProperty = () => {
   const { user } = useContext(AuthContext);
@@ -21,6 +23,7 @@ const AddProperty = () => {
       const file = e.target.files[0];
       setSelectedImage(file);
       setImagePreview(URL.createObjectURL(file));
+   
     }
   };
 
@@ -29,10 +32,59 @@ const AddProperty = () => {
       toast.error('Please select an image');
       return;
     }
-
-    // Handle form submission
-    toast.success('Property added successfully');
+  
+    try {
+      const image = selectedImage;
+      let photoURL = '';
+  
+      // Upload image to ImgBB
+      if (image) {
+        const formData = new FormData();
+        formData.append('image', image);
+  
+        const { data: imgResponse } = await axios.post(
+          `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_api_key}`,
+          formData
+        );
+  
+        photoURL = imgResponse.data.display_url;
+        console.log('Uploaded Photo URL:', photoURL);
+      }
+  
+      // Extract price range as numbers
+      const priceMin = parseFloat(data.priceMin);
+      const priceMax = parseFloat(data.priceMax);
+  
+      // Check if the price range is valid
+      if (priceMin > priceMax) {
+        toast.error('Minimum price cannot be greater than maximum price');
+        return;
+      }
+  
+      // Prepare data to submit to the backend
+      const updatedData = {
+        ...data, // Existing form data
+        photoURL, // Image URL
+        verified: false, // Additional fields
+        verificationStatus: 'pending',
+        priceRange: {
+          min: priceMin,
+          max: priceMax,
+        },
+      };
+  
+      // Submit property data
+      const { data: propertyResponse } = await axios.post('http://localhost:9000/properties', updatedData);
+  
+      if (propertyResponse.insertedId) {
+        toast.success('Property added successfully');
+      }
+    } catch (error) {
+      console.error('Error:', error.response?.data || error.message);
+      toast.error('An error occurred while submitting the property.');
+    }
   };
+  
 
   return (
     <div className="max-w-4xl mx-auto p-6">
