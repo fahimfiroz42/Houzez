@@ -1,51 +1,45 @@
 import { useState } from 'react';
 import { Check, X, Shield } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 const ManageProperties = () => {
-  const [properties, setProperties] = useState([
-    {
-      id: 1,
-      title: "Luxury Villa with Pool",
-      location: "Beverly Hills, CA",
-      agentName: "John Doe",
-      agentEmail: "john@example.com",
-      priceRange: {
-        min: 2500000,
-        max: 3000000,
-      },
-      status: 'pending',
-    },
-    {
-      id: 2,
-      title: "Modern Downtown Apartment",
-      location: "Manhattan, NY",
-      agentName: "Jane Smith",
-      agentEmail: "jane@example.com",
-      priceRange: {
-        min: 850000,
-        max: 950000,
-      },
-      status: 'pending',
-    },
-  ]);
+ 
+  const {data:properties,isLoading,refetch}=useQuery({
+    queryKey:['properties'],
+    queryFn: async () => {
+        const {data}=await axios.get(`http://localhost:9000/properties`)
+        return data
+  }
+  
+}
+)
 
-  const handleVerify = (id) => {
-    setProperties(
-      properties.map((property) =>
-        property.id === id ? { ...property, status: 'verified' } : property
-      )
-    );
-    toast.success('Property verified successfully');
+
+
+
+  const handleVerify = async (id) => {
+
+    const {data}=await axios.patch(`http://localhost:9000/properties/${id}`,{
+        verificationStatus: "verified",
+      })
+    if(data.modifiedCount>0){
+        toast.success('Property verified successfully');
+    }
+     refetch()
+   
   };
 
-  const handleReject = (id) => {
-    setProperties(
-      properties.map((property) =>
-        property.id === id ? { ...property, status: 'rejected' } : property
-      )
-    );
-    toast.success('Property rejected');
+  const handleReject =async (id) => {
+    const {data}=await axios.patch(`http://localhost:9000/properties/${id}`,{
+        verificationStatus: "rejected",
+      })
+    if(data.modifiedCount>0){
+        toast.success('Property rejected');
+    }
+     refetch()
+   
   };
 
   return (
@@ -74,8 +68,8 @@ const ManageProperties = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {properties.map((property) => (
-              <tr key={property.id}>
+            {properties &&  properties.map((property) => (
+              <tr key={property._id}>
                 <td className="px-6 py-4">
                   <div>
                     <p className="font-medium text-gray-900">{property.title}</p>
@@ -96,28 +90,28 @@ const ManageProperties = () => {
                 <td className="px-6 py-4">
                   <span
                     className={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full ${
-                      property.status === 'pending'
+                      property.verificationStatus=== 'pending'
                         ? 'bg-yellow-100 text-yellow-800'
-                        : property.status === 'verified'
+                        : property.verificationStatus=== 'verified'
                         ? 'bg-green-100 text-green-800'
                         : 'bg-red-100 text-red-800'
                     }`}
                   >
                     <Shield className="w-3 h-3 mr-1" />
-                    {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
+                    {property.verificationStatus.charAt(0).toUpperCase() + property.verificationStatus.slice(1)}
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  {property.status === 'pending' && (
+                  {property.verificationStatus === 'pending' && (
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => handleVerify(property.id)}
+                        onClick={() => handleVerify(property._id)}
                         className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600"
                       >
                         <Check className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => handleReject(property.id)}
+                        onClick={() => handleReject(property._id)}
                         className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
                       >
                         <X className="w-4 h-4" />
