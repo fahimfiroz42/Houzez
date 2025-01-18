@@ -1,38 +1,28 @@
 import { useState } from 'react';
 import { MapPin, DollarSign, Shield, Search, SlidersHorizontal } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 const AllProperties = () => {
   const [searchLocation, setSearchLocation] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
 
-  const properties = [
-    {
-      id: 1,
-      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
-      title: "Luxury Villa with Pool",
-      location: "Beverly Hills, CA",
-      price: 2500000,
-      verified: true,
-      agent: {
-        name: "John Doe",
-        image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3"
-      }
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3",
-      title: "Modern Downtown Apartment",
-      location: "Manhattan, NY",
-      price: 850000,
-      verified: true,
-      agent: {
-        name: "Jane Smith",
-        image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3"
-      }
-    },
-    // Add more properties as needed
-  ];
+  
+
+  const {data:properties,isLoading}=useQuery({
+    queryKey:['propertie'],
+    queryFn: async () => {
+        const {data}=await axios.get(`http://localhost:9000/properties?verify=verified`)
+        return data
+  }
+  
+}
+)
+
+
+
+
 
   const filteredProperties = properties
     .filter(property => 
@@ -79,9 +69,9 @@ const AllProperties = () => {
         {/* Properties Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProperties.map((property) => (
-            <div key={property.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div key={property._id} className="bg-white rounded-lg shadow-lg overflow-hidden">
               <img 
-                src={property.image} 
+                src={property.photoURL} 
                 alt={property.title} 
                 className="w-full h-48 object-cover"
               />
@@ -89,7 +79,11 @@ const AllProperties = () => {
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xl font-semibold">{property.title}</h3>
                   {property.verified && (
+                    <div className="flex items-center">
                     <Shield className="w-5 h-5 text-green-500" />
+                    <p className='text-green-700 bg-green-100 text-sm rounded-full px-2 '>Verified</p>
+                    </div>
+                    
                   )}
                 </div>
                 <div className="flex items-center text-gray-600 mb-2">
@@ -98,19 +92,19 @@ const AllProperties = () => {
                 </div>
                 <div className="flex items-center text-gray-600 mb-4">
                   <DollarSign className="w-4 h-4 mr-1" />
-                  <span>{property.price.toLocaleString()}</span>
+                  <span>{property.priceRange.min.toLocaleString()} - {property.priceRange.max.toLocaleString()}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <img 
-                      src={property.agent.image} 
-                      alt={property.agent.name} 
+                      src={property.agentImage} 
+                      alt={property.agentName} 
                       className="w-8 h-8 rounded-full mr-2"
                     />
-                    <span className="text-sm text-gray-600">{property.agent.name}</span>
+                    <span className="text-sm text-gray-600">{property.agentName}</span>
                   </div>
                   <Link
-                    to={`/property/${property.id}`}
+                    to={`/property/${property._id}`}
                     className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
                   >
                     View Details
