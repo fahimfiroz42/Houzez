@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { MapPin, DollarSign, Shield, Heart, Star, User } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Loading from '../components/shared/Loading';
+import { AuthContext } from '../AuthPovider/AuthPovider';
 
 
 const PropertyDetails = () => {
@@ -12,6 +13,7 @@ const PropertyDetails = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(5);
+  const {user}=useContext(AuthContext)
 
 const features=[
           "5 Bedrooms",
@@ -22,35 +24,7 @@ const features=[
           "Smart Home System"
         ]
 
-//     id: 1,
-//     title: "Luxury Villa with Pool",
-//     description: "This stunning luxury villa offers the perfect blend of modern design and comfortable living. Featuring a large pool, spacious rooms, and state-of-the-art amenities.",
-//     location: "Beverly Hills, CA",
-//     price: {
-//       min: 2500000,
-//       max: 3000000
-//     },
-//     images: [
-//       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
-//       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3",
-//       "https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?ixlib=rb-4.0.3"
-//     ],
-//     features: [
-//       "5 Bedrooms",
-//       "6 Bathrooms",
-//       "Swimming Pool",
-//       "Garden",
-//       "3 Car Garage",
-//       "Smart Home System"
-//     ],
-//     agent: {
-//       name: "John Doe",
-//       image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3",
-//       phone: "+1 234 567 890",
-//       email: "john.doe@realestate.com"
-//     },
-//     verified: true
-//   };
+  
 
   const reviews = [
     {
@@ -83,10 +57,24 @@ if(isLoading){
 
 
 
-  const handleAddToWishlist = () => {
+  const handleAddToWishlist = async () => {
 
-    
-    toast.success('Added to wishlist!');
+    if(user?.email==property?.agentEmail){
+        return toast.error('You cannot add your own property to wishlist!')
+    }
+
+    const {data}= await axios.post('http://localhost:9000/wishlist',{...property,
+      userEmail:user?.email,
+      userName:user?.displayName,
+      userPhoto:user?.photoURL
+    })
+
+
+    if(data.insertedId){
+        toast.success('Added to wishlist!');    
+    }
+   
+
   };
 
   const handleSubmitReview = (e) => {
