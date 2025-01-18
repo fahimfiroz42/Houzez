@@ -1,44 +1,56 @@
 import { useState } from 'react';
 import { MapPin, DollarSign, Shield, Heart, Star, User } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import Loading from '../components/shared/Loading';
 
 
 const PropertyDetails = () => {
- 
+  const { id } = useParams();
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(5);
 
-  const property = {
-    id: 1,
-    title: "Luxury Villa with Pool",
-    description: "This stunning luxury villa offers the perfect blend of modern design and comfortable living. Featuring a large pool, spacious rooms, and state-of-the-art amenities.",
-    location: "Beverly Hills, CA",
-    price: {
-      min: 2500000,
-      max: 3000000
-    },
-    images: [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3",
-      "https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?ixlib=rb-4.0.3"
-    ],
-    features: [
-      "5 Bedrooms",
-      "6 Bathrooms",
-      "Swimming Pool",
-      "Garden",
-      "3 Car Garage",
-      "Smart Home System"
-    ],
-    agent: {
-      name: "John Doe",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3",
-      phone: "+1 234 567 890",
-      email: "john.doe@realestate.com"
-    },
-    verified: true
-  };
+const features=[
+          "5 Bedrooms",
+          "6 Bathrooms",
+          "Swimming Pool",
+          "Garden",
+          "3 Car Garage",
+          "Smart Home System"
+        ]
+
+//     id: 1,
+//     title: "Luxury Villa with Pool",
+//     description: "This stunning luxury villa offers the perfect blend of modern design and comfortable living. Featuring a large pool, spacious rooms, and state-of-the-art amenities.",
+//     location: "Beverly Hills, CA",
+//     price: {
+//       min: 2500000,
+//       max: 3000000
+//     },
+//     images: [
+//       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
+//       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3",
+//       "https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?ixlib=rb-4.0.3"
+//     ],
+//     features: [
+//       "5 Bedrooms",
+//       "6 Bathrooms",
+//       "Swimming Pool",
+//       "Garden",
+//       "3 Car Garage",
+//       "Smart Home System"
+//     ],
+//     agent: {
+//       name: "John Doe",
+//       image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3",
+//       phone: "+1 234 567 890",
+//       email: "john.doe@realestate.com"
+//     },
+//     verified: true
+//   };
 
   const reviews = [
     {
@@ -53,8 +65,27 @@ const PropertyDetails = () => {
     },
     // Add more reviews
   ];
+ 
+  const {data:property,isLoading}=useQuery({
+    queryKey:['property'],
+    queryFn: async () => {
+        const {data}=await axios.get(`http://localhost:9000/propertie/${id}`)
+        return data
+  }
+  
+}
+)
+
+if(isLoading){
+    return <Loading/>
+}
+
+
+
 
   const handleAddToWishlist = () => {
+
+    
     toast.success('Added to wishlist!');
   };
 
@@ -100,20 +131,11 @@ const PropertyDetails = () => {
         {/* Property Images */}
         <div className="grid grid-cols-2 gap-4 mb-8">
           <img
-            src={property.images[0]}
+            src={property.photoURL}
             alt={property.title}
             className="w-full h-96 object-cover rounded-lg"
           />
-          <div className="grid grid-cols-2 gap-4">
-            {property.images.slice(1).map((image, index) => (
-              <img
-                key={index}
-                src={image}
-                alt={`${property.title} ${index + 2}`}
-                className="w-full h-44 object-cover rounded-lg"
-              />
-            ))}
-          </div>
+          
         </div>
 
         {/* Property Details */}
@@ -125,7 +147,7 @@ const PropertyDetails = () => {
               
               <h3 className="text-xl font-bold mb-4">Features</h3>
               <ul className="grid grid-cols-2 gap-4">
-                {property.features.map((feature, index) => (
+                {features.map((feature, index) => (
                   <li key={index} className="flex items-center text-gray-600">
                     <Shield className="w-4 h-4 mr-2 text-blue-500" />
                     {feature}
@@ -175,27 +197,24 @@ const PropertyDetails = () => {
           <div className="bg-white rounded-lg shadow-md p-6 h-fit">
             <div className="text-center mb-6">
               <img
-                src={property.agent.image}
-                alt={property.agent.name}
+                src={property.agentImage}
+                alt={property.agentName}
                 className="w-24 h-24 rounded-full mx-auto mb-4"
               />
-              <h3 className="text-xl font-bold">{property.agent.name}</h3>
+              <h3 className="text-xl font-bold">{property.agentName}</h3>
               <p className="text-gray-600">Real Estate Agent</p>
             </div>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">Price Range:</span>
                 <span className="font-semibold">
-                  ${property.price.min.toLocaleString()} - ${property.price.max.toLocaleString()}
+                  ${property.priceRange.min.toLocaleString()} - ${property.priceRange.max.toLocaleString()}
                 </span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-600">Phone:</span>
-                <span className="font-semibold">{property.agent.phone}</span>
-              </div>
+             
               <div className="flex items-center justify-between">
                 <span className="text-gray-600">Email:</span>
-                <span className="font-semibold">{property.agent.email}</span>
+                <span className="font-semibold">{property.agentEmail}</span>
               </div>
             </div>
           </div>

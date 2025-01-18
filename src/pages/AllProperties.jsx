@@ -3,36 +3,48 @@ import { MapPin, DollarSign, Shield, Search, SlidersHorizontal } from 'lucide-re
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import Loading from '../components/shared/Loading';
 
 const AllProperties = () => {
   const [searchLocation, setSearchLocation] = useState('');
+
   const [sortOrder, setSortOrder] = useState('asc');
 
   
 
-  const {data:properties,isLoading}=useQuery({
-    queryKey:['propertie'],
+  const {data:properties,isLoading,refetch}=useQuery({
+    queryKey:['properties'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/properties?verify=verified`)
+        const {data}=await axios.get(`http://localhost:9000/properties?verify=verified&search=${searchLocation}&sortByPrice=${sortOrder}`)
         return data
   }
   
 }
 )
 
+if(isLoading){
+    return <Loading/>
+}
+
+
+const handleSearch = (e) => {
+    setSearchLocation(e.target.value); 
+    refetch()
+  };
+
+  const handleSortChange = (e) => {
+    setSortOrder(e.target.value); 
+    refetch()
+  };
 
 
 
 
   const filteredProperties = properties
-    .filter(property => 
-      property.location.toLowerCase().includes(searchLocation.toLowerCase())
-    )
-    .sort((a, b) => 
-      sortOrder === 'asc' ? a.price - b.price : b.price - a.price
-    );
-
+   
   return (
+   
+
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4">
         <h1 className="text-3xl font-bold mb-8">All Properties</h1>
@@ -47,7 +59,7 @@ const AllProperties = () => {
                   type="text"
                   placeholder="Search by location..."
                   value={searchLocation}
-                  onChange={(e) => setSearchLocation(e.target.value)}
+                  onChange={handleSearch}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -56,7 +68,7 @@ const AllProperties = () => {
               <SlidersHorizontal className="text-gray-400" />
               <select
                 value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value)}
+                onChange={handleSortChange}
                 className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="asc">Price: Low to High</option>
@@ -68,7 +80,7 @@ const AllProperties = () => {
 
         {/* Properties Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProperties.map((property) => (
+          {filteredProperties &&  filteredProperties.map((property) => (
             <div key={property._id} className="bg-white rounded-lg shadow-lg overflow-hidden">
               <img 
                 src={property.photoURL} 
