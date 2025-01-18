@@ -56,7 +56,7 @@ if(isLoading){
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {wishlistItems && wishlistItems.map((item) => (
-            <div key={item.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div key={item._id} className="bg-white rounded-lg shadow-md overflow-hidden">
               <img
                 src={item.photoURL}
                 alt={item.title}
@@ -91,7 +91,7 @@ if(isLoading){
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleMakeOffer(item.id)}
+                    onClick={() => handleMakeOffer(item._id)}
                     className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex items-center justify-center"
                   >
                     <CreditCard className="w-4 h-4 mr-2" />

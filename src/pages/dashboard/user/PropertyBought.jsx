@@ -1,34 +1,39 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { MapPin, DollarSign, CheckCircle, XCircle, CreditCard, X } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { AuthContext } from '../../../AuthPovider/AuthPovider';
 
 const PropertyBought = () => {
-  const [properties, setProperties] = useState([
-    {
-      id: 1,
-      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
-      title: "Luxury Villa with Pool",
-      location: "Beverly Hills, CA",
-      offeredAmount: 2750000,
-      status: 'accepted',
-      agent: {
-        name: "John Doe",
-        image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3"
-      }
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3",
-      title: "Modern Downtown Apartment",
-      location: "Manhattan, NY",
-      offeredAmount: 900000,
-      status: 'pending',
-      agent: {
-        name: "Jane Smith",
-        image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3"
-      }
-    }
-  ]);
+
+    const {user}=useContext(AuthContext)
+//   const [properties, setProperties] = useState([
+//     {
+//       id: 1,
+//       image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
+//       title: "Luxury Villa with Pool",
+//       location: "Beverly Hills, CA",
+//       offeredAmount: 2750000,
+//       status: 'accepted',
+//       agent: {
+//         name: "John Doe",
+//         image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3"
+//       }
+//     },
+//     {
+//       id: 2,
+//       image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3",
+//       title: "Modern Downtown Apartment",
+//       location: "Manhattan, NY",
+//       offeredAmount: 900000,
+//       status: 'pending',
+//       agent: {
+//         name: "Jane Smith",
+//         image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3"
+//       }
+//     }
+//   ]);
 
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -38,6 +43,18 @@ const PropertyBought = () => {
     cvc: '',
     name: ''
   });
+
+
+  const {data:properties,isLoading}=useQuery({
+    queryKey:['properties'],
+    queryFn: async () => {
+        const {data}=await axios.get(`http://localhost:9000/offers/${user?.email}`)
+        return data
+  }
+  
+}
+)
+
 
   const handlePayment = (property) => {
     setSelectedProperty(property);
@@ -49,7 +66,7 @@ const PropertyBought = () => {
     // Here you would typically integrate with a payment processor
     
     // For demo purposes, we'll just show a success message and update the status
-    setProperties(properties.map(prop => 
+    setProperties(properties?.map(prop => 
       prop.id === selectedProperty.id 
         ? { ...prop, status: 'bought', transactionId: 'TXN' + Date.now() } 
         : prop
@@ -123,8 +140,8 @@ const PropertyBought = () => {
       <h1 className="text-2xl font-bold mb-6">Property Bought</h1>
 
       <div className="grid grid-cols-1 gap-6">
-        {properties.map((property) => (
-          <div key={property.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+        { properties &&  properties.map((property) => (
+          <div key={property._id} className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="flex flex-col md:flex-row">
               <img
                 src={property.image}
@@ -142,16 +159,16 @@ const PropertyBought = () => {
                 </div>
                 <div className="flex items-center text-gray-600 mb-4">
                   <DollarSign className="w-4 h-4 mr-1" />
-                  <span>Offered Amount: ${property.offeredAmount.toLocaleString()}</span>
+                  <span>Offered Amount: ${property.offerAmount.toLocaleString()}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <img
-                      src={property.agent.image}
-                      alt={property.agent.name}
+                      src={property.agentImage}
+                      alt={property.agentName}
                       className="w-8 h-8 rounded-full mr-2"
                     />
-                    <span className="text-sm text-gray-600">{property.agent.name}</span>
+                    <span className="text-sm text-gray-600">{property.agentName}</span>
                   </div>
                   {property.status === 'accepted' && (
                     <button

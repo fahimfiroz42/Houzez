@@ -58,15 +58,16 @@ if(isLoading){
 
 
   const handleAddToWishlist = async () => {
-
+     
     if(user?.email==property?.agentEmail){
         return toast.error('You cannot add your own property to wishlist!')
     }
-
-    const {data}= await axios.post('http://localhost:9000/wishlist',{...property,
+    const { _id, ...propertyWithoutId } = property;
+    const {data}= await axios.post('http://localhost:9000/wishlist',{...propertyWithoutId ,
       userEmail:user?.email,
       userName:user?.displayName,
-      userPhoto:user?.photoURL
+      userPhoto:user?.photoURL,
+      propertyId: _id
     })
 
 
