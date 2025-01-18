@@ -64,13 +64,16 @@ const AddProperty = () => {
       // Prepare data to submit to the backend
       const updatedData = {
         ...data, // Existing form data
-        photoURL, // Image URL
+        photoURL,
+        agentImage: user?.photoURL, // Image URL
         verified: false, // Additional fields
         verificationStatus: 'pending',
         priceRange: {
           min: priceMin,
           max: priceMax,
         },
+        agentName: user?.displayName,
+        agentEmail: user?.email
       };
   
       // Submit property data

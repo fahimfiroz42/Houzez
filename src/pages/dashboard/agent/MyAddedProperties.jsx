@@ -1,47 +1,26 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { MapPin, DollarSign, Shield, Pencil, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { AuthContext } from '../../../AuthPovider/AuthPovider';
 
 const MyAddedProperties = () => {
-  const [properties, setProperties] = useState([
-    {
-      id: 1,
-      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
-      title: "Luxury Villa with Pool",
-      location: "Beverly Hills, CA",
-      price: {
-        min: 2500000,
-        max: 3000000
-      },
-      verified: true,
-      verificationStatus: 'verified'
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3",
-      title: "Modern Downtown Apartment",
-      location: "Manhattan, NY",
-      price: {
-        min: 850000,
-        max: 950000
-      },
-      verified: false,
-      verificationStatus: 'pending'
-    },
-    {
-      id: 3,
-      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3",
-      title: "Seaside Beach House",
-      location: "Malibu, CA",
-      price: {
-        min: 3200000,
-        max: 3500000
-      },
-      verified: false,
-      verificationStatus: 'rejected'
-    }
-  ]);
+    const {user}=useContext(AuthContext)
+ 
+
+  const {data:properties,isLoading}=useQuery({
+    queryKey:['properties'],
+    queryFn: async () => {
+        const {data}=await axios.get(`http://localhost:9000/propertie/${user?.email}`)
+        return data
+  }
+  
+}
+)
+
+
 
   const handleDelete = (id) => {
     setProperties(properties.filter(property => property.id !== id));
@@ -72,12 +51,14 @@ const MyAddedProperties = () => {
           Add New Property
         </Link>
       </div>
+       {
+        properties && properties.length> 0 ?
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {properties.map((property) => (
           <div key={property.id} className="bg-white rounded-lg shadow-md overflow-hidden">
             <img
-              src={property.image}
+              src={property.photoURL}
               alt={property.title}
               className="w-full h-48 object-cover"
             />
@@ -93,7 +74,7 @@ const MyAddedProperties = () => {
               <div className="flex items-center text-gray-600 mb-4">
                 <DollarSign className="w-4 h-4 mr-1" />
                 <span>
-                  ${property.price.min.toLocaleString()} - ${property.price.max.toLocaleString()}
+                  ${property.priceRange.min.toLocaleString()} - ${property.priceRange.max.toLocaleString()}
                 </span>
               </div>
               <div className="flex gap-2">
@@ -107,7 +88,7 @@ const MyAddedProperties = () => {
                   </Link>
                 )}
                 <button
-                  onClick={() => handleDelete(property.id)}
+                  onClick={() => handleDelete(property._id)}
                   className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -117,6 +98,13 @@ const MyAddedProperties = () => {
           </div>
         ))}
       </div>
+        
+        
+        
+        
+        : <p>No properties found</p>
+       }
+      
     </div>
   );
 };
