@@ -3,6 +3,7 @@ import { Check, X, Shield } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import Loading from '../../../components/shared/Loading';
 
 const ManageProperties = () => {
  
@@ -15,6 +16,10 @@ const ManageProperties = () => {
   
 }
 )
+
+if(isLoading){
+  return <Loading/>
+}
 
 
 

@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
+import Loading from '../../../components/shared/Loading';
 
 const MyAddedProperties = () => {
     const {user}=useContext(AuthContext)
@@ -20,7 +21,9 @@ const MyAddedProperties = () => {
 }
 )
 
-
+if(isLoading){
+    return <Loading/>
+}
 
   const handleDelete = (id) => {
     setProperties(properties.filter(property => property.id !== id));
