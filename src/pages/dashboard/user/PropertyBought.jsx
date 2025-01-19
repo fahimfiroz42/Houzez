@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
+import Loading from '../../../components/shared/Loading';
 
 const PropertyBought = () => {
 
@@ -54,6 +55,11 @@ const PropertyBought = () => {
   
 }
 )
+
+
+if(isLoading){
+    return <Loading/>
+}
 
 
   const handlePayment = (property) => {
