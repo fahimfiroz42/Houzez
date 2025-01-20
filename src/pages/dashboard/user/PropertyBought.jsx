@@ -129,6 +129,14 @@ if(isLoading){
             Accepted
           </span>
         );
+      case 'rejected':
+        return (
+          <span className="flex items-center text-red-500">
+            <XCircle className="w-4 h-4 mr-1" />
+            Rejected
+          </span>
+        );
+
       case 'bought':
         return (
           <span className="flex items-center text-blue-500">
@@ -214,7 +222,7 @@ if(isLoading){
             <div className="mb-4">
               <p className="text-gray-600">Property: {selectedProperty.title}</p>
               <p className="text-lg font-semibold">
-                Amount: ${selectedProperty.offeredAmount.toLocaleString()}
+                Amount: ${selectedProperty?.offerAmount?.toLocaleString()}
               </p>
             </div>
 
@@ -294,7 +302,7 @@ if(isLoading){
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center"
               >
                 <CreditCard className="w-4 h-4 mr-2" />
-                Pay ${selectedProperty.offeredAmount.toLocaleString()}
+                Pay ${selectedProperty.offerAmount.toLocaleString()}
               </button>
             </form>
           </div>

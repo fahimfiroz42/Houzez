@@ -50,6 +50,20 @@ const features=[
 }
 )
 
+
+const {data:reviews,isLoading}=useQuery({
+  queryKey:['reviews'],
+  queryFn: async () => {
+      const {data}=await axios.get(`http://localhost:9000/propertie/${id}`)
+      return data
+}
+
+}
+)
+
+
+
+
 if(isLoading){
     return <Loading/>
 }
@@ -78,12 +92,36 @@ if(isLoading){
 
   };
 
-  const handleSubmitReview = (e) => {
+  const handleSubmitReview = async (e) => {
     e.preventDefault();
-    toast.success('Review submitted successfully!');
-    setShowReviewModal(false);
-    setReview('');
-    setRating(5);
+
+    const reviewData = {
+      propertyId: property._id,
+      propertyTitle: property.title,
+      userEmail: user?.email,
+      userName: user?.displayName,
+      userImage: user?.photoURL,
+      rating,
+      comment: review,
+      agentName: property.agentName,
+     
+    };
+
+    try{
+        const {data}=await axios.post('http://localhost:9000/reviews',reviewData)
+        if(data.insertedId){
+          toast.success('Review submitted successfully!');
+        }
+    }
+    catch(error){
+        toast.error(error.message);
+    }
+    finally{
+        setShowReviewModal(false);
+        setReview('');
+        setRating(5);
+    }
+   
   };
 
   return (
