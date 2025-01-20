@@ -29,7 +29,7 @@ const RequestedProperties = () => {
   //   }
   // ]);
 
-  const {data:requests,isLoading}=useQuery({
+  const {data:requests,isLoading,refetch}=useQuery({
     queryKey:['requests'],
     queryFn: async () => {
         const {data}=await axios.get(`http://localhost:9000/offers?email=${user?.email}`)
@@ -39,21 +39,30 @@ const RequestedProperties = () => {
 }
 )
 
+if(isLoading){
+  return <Loading/>
+}
 
 
 
-  const handleAccept = (id) => {
-    setRequests(requests.map(request => {
-      if (request.id === id) {
-        return { ...request, status: 'accepted' };
-      }
-      // Auto reject other offers for the same property
-      if (request.title === requests.find(r => r.id === id)?.title) {
-        return { ...request, status: 'rejected' };
-      }
-      return request;
-    }));
-    toast.success('Offer accepted successfully');
+
+  const handleAccept = async (id,propertyId) => {
+
+    try {
+
+      const { data } = await axios.patch(`http://localhost:9000/offers/${id}/accept`, {
+        propertyId,
+      });
+
+      toast.success(data.message || 'Offer accepted successfully!');
+      refetch();
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to accept the offer. Please try again.');
+    
+    }
+    
+
   };
 
   const handleReject = (id) => {
@@ -120,13 +129,13 @@ const RequestedProperties = () => {
                   {request.status === 'pending' ? (
                     <div className="flex space-x-2">
                       <button
-                        onClick={() => handleAccept(request.id)}
+                        onClick={() => handleAccept(request._id,request.propertyId)}
                         className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600"
                       >
                         <Check className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => handleReject(request.id)}
+                        onClick={() => handleReject(request._id)}
                         className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
                       >
                         <X className="w-4 h-4" />

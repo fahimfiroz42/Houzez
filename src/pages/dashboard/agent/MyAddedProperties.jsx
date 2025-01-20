@@ -14,7 +14,7 @@ const MyAddedProperties = () => {
   const {data:properties,isLoading}=useQuery({
     queryKey:['properties'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/propertie/${user?.email}`)
+        const {data}=await axios.get(`http://localhost:9000/property/${user?.email}`)
         return data
   }
   
