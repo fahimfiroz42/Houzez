@@ -1,51 +1,91 @@
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { Star, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
+import { AuthContext } from '../../../AuthPovider/AuthPovider';
+import { format } from 'date-fns';
+import Swal from 'sweetalert2';
 
 const MyReviews = () => {
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      propertyTitle: "Luxury Villa with Pool",
-      agentName: "John Doe",
-      rating: 5,
-      comment: "Amazing property with excellent amenities. The agent was very professional and helpful throughout the process.",
-      date: "2024-02-15"
-    },
-    {
-      id: 2,
-      propertyTitle: "Modern Downtown Apartment",
-      agentName: "Jane Smith",
-      rating: 4,
-      comment: "Great location and modern design. The process was smooth but took a bit longer than expected.",
-      date: "2024-02-10"
+ const {user}=useContext(AuthContext)
+
+  const {data:reviews,refetch}=useQuery({
+    queryKey:['reviews'],
+    queryFn: async () => {
+        const {data}=await axios.get(`http://localhost:9000/allreviews/${user?.email}`)
+        return data
+  }
+  
+  }
+  )
+  
+
+
+
+
+
+  const handleDelete = async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      });
+  
+      if (result.isConfirmed) {
+        // Wait for the delete request to complete
+        const { data } = await axios.delete(`http://localhost:9000/reviews/${id}`);
+  
+        // Check if the deletion was successful
+        if (data.deletedCount > 0) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your review has been deleted.",
+            icon: "success"
+          });
+          // Refetch the data to reflect changes
+          refetch();
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Failed to delete the review.",
+            icon: "error"
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting the review:", error);
+      Swal.fire({
+        title: "Error",
+        text: "An unexpected error occurred.",
+        icon: "error"
+      });
     }
-  ]);
-
-  const handleDelete = (id) => {
-    setReviews(reviews.filter(review => review.id !== id));
-    toast.success('Review deleted successfully');
   };
-
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">My Reviews</h1>
 
-      {reviews.length === 0 ? (
+      {reviews && reviews.length === 0 ? (
         <div className="bg-white rounded-lg shadow-md p-8 text-center">
           <p className="text-gray-500">You haven't written any reviews yet</p>
         </div>
       ) : (
         <div className="space-y-6">
-          {reviews.map((review) => (
-            <div key={review.id} className="bg-white rounded-lg shadow-md p-6">
+          {reviews && reviews.map((review) => (
+            <div key={review._id} className="bg-white rounded-lg shadow-md p-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-lg font-semibold mb-1">{review.propertyTitle}</h3>
                   <p className="text-sm text-gray-500">Agent: {review.agentName}</p>
                 </div>
                 <button
-                  onClick={() => handleDelete(review.id)}
+                  onClick={() => handleDelete(review._id)}
                   className="text-red-500 hover:text-red-600"
                 >
                   <Trash2 className="w-5 h-5" />
@@ -63,7 +103,7 @@ const MyReviews = () => {
                   />
                 ))}
                 <span className="text-sm text-gray-500 ml-2">
-                  {new Date(review.date).toLocaleDateString()}
+                  {format(new Date(review.date), 'MMM d, yyyy')}
                 </span>
               </div>
               <p className="text-gray-600">{review.comment}</p>

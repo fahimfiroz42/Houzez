@@ -26,19 +26,19 @@ const features=[
 
   
 
-  const reviews = [
-    {
-      id: 1,
-      user: {
-        name: "Emily Brown",
-        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3"
-      },
-      rating: 5,
-      comment: "Amazing property! The amenities are top-notch and the location is perfect.",
-      date: "2024-02-15"
-    },
-    // Add more reviews
-  ];
+  // const reviews = [
+  //   {
+  //     id: 1,
+  //     user: {
+  //       name: "Emily Brown",
+  //       image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3"
+  //     },
+  //     rating: 5,
+  //     comment: "Amazing property! The amenities are top-notch and the location is perfect.",
+  //     date: "2024-02-15"
+  //   },
+  //   // Add more reviews
+  // ];
  
   const {data:property,isLoading}=useQuery({
     queryKey:['property'],
@@ -51,10 +51,10 @@ const features=[
 )
 
 
-const {data:reviews,isLoading}=useQuery({
+const {data:reviews,refetch}=useQuery({
   queryKey:['reviews'],
   queryFn: async () => {
-      const {data}=await axios.get(`http://localhost:9000/propertie/${id}`)
+      const {data}=await axios.get(`http://localhost:9000/review/${id}`)
       return data
 }
 
@@ -120,6 +120,7 @@ if(isLoading){
         setShowReviewModal(false);
         setReview('');
         setRating(5);
+        refetch();
     }
    
   };
@@ -196,16 +197,16 @@ if(isLoading){
               </div>
 
               <div className="space-y-6">
-                {reviews.map((review) => (
-                  <div key={review.id} className="border-b pb-6">
+                {reviews && reviews.map((review) => (
+                  <div key={review._id} className="border-b pb-6">
                     <div className="flex items-center gap-4 mb-2">
                       <img
-                        src={review.user.image}
-                        alt={review.user.name}
+                        src={review.userImage}
+                        alt={review.useeName}
                         className="w-10 h-10 rounded-full"
                       />
                       <div>
-                        <h4 className="font-semibold">{review.user.name}</h4>
+                        <h4 className="font-semibold">{review.userName}</h4>
                         <div className="flex items-center">
                           {[...Array(review.rating)].map((_, i) => (
                             <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
