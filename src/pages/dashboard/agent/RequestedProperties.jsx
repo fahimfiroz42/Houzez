@@ -65,11 +65,21 @@ if(isLoading){
 
   };
 
-  const handleReject = (id) => {
-    setRequests(requests.map(request => 
-      request.id === id ? { ...request, status: 'rejected' } : request
-    ));
-    toast.success('Offer rejected');
+  const handleReject = async (id,propertyId) => {
+    try {
+
+      const { data } = await axios.patch(`http://localhost:9000/offers/${id}/reject`, {
+        propertyId,
+      });
+
+      toast.success(data.message || 'Offer rejected');
+      refetch();
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to reject the offer. Please try again.');
+    
+    }
+    
   };
 
   return (
@@ -135,7 +145,7 @@ if(isLoading){
                         <Check className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => handleReject(request._id)}
+                        onClick={() => handleReject(request._id,request.propertyId)}
                         className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
                       >
                         <X className="w-4 h-4" />
