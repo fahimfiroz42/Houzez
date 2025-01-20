@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Star, Trash2 } from 'lucide-react';
 import { useContext, useState } from 'react';
-import toast from 'react-hot-toast';
+
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
 import { format } from 'date-fns';
 import Swal from 'sweetalert2';

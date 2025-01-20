@@ -25,20 +25,6 @@ const features=[
         ]
 
   
-
-  // const reviews = [
-  //   {
-  //     id: 1,
-  //     user: {
-  //       name: "Emily Brown",
-  //       image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3"
-  //     },
-  //     rating: 5,
-  //     comment: "Amazing property! The amenities are top-notch and the location is perfect.",
-  //     date: "2024-02-15"
-  //   },
-  //   // Add more reviews
-  // ];
  
   const {data:property,isLoading}=useQuery({
     queryKey:['property'],

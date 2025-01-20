@@ -1,40 +1,68 @@
 import { useState } from 'react';
 import { Building2, MapPin, DollarSign, Megaphone } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import Loading from '../../../components/shared/Loading';
+import { ca } from 'date-fns/locale';
 
 const AdvertiseProperty = () => {
-  const [properties, setProperties] = useState([
-    {
-      id: 1,
-      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
-      title: "Luxury Villa with Pool",
-      location: "Beverly Hills, CA",
-      agentName: "John Doe",
-      priceRange: {
-        min: 2500000,
-        max: 3000000
-      },
-      isAdvertised: false
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3",
-      title: "Modern Downtown Apartment",
-      location: "Manhattan, NY",
-      agentName: "Jane Smith",
-      priceRange: {
-        min: 850000,
-        max: 950000
-      },
-      isAdvertised: true
-    }
-  ]);
+  // const [properties, setProperties] = useState([
+  //   {
+  //     id: 1,
+  //     image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
+  //     title: "Luxury Villa with Pool",
+  //     location: "Beverly Hills, CA",
+  //     agentName: "John Doe",
+  //     priceRange: {
+  //       min: 2500000,
+  //       max: 3000000
+  //     },
+  //     isAdvertised: false
+  //   },
+  //   {
+  //     id: 2,
+  //     image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3",
+  //     title: "Modern Downtown Apartment",
+  //     location: "Manhattan, NY",
+  //     agentName: "Jane Smith",
+  //     priceRange: {
+  //       min: 850000,
+  //       max: 950000
+  //     },
+  //     isAdvertised: true
+  //   }
+  // ]);
 
-  const handleAdvertise = (id) => {
-    setProperties(properties.map(property => 
-      property.id === id ? { ...property, isAdvertised: true } : property
-    ));
-    toast.success('Property added to advertisements');
+  const {data:properties,isLoading,refetch}=useQuery({
+    queryKey:['properties'],
+    queryFn: async () => {
+        const {data}=await axios.get(`http://localhost:9000/properties?verify=verified`)
+        return data
+  }
+  
+}
+)
+
+if(isLoading){
+  return <Loading/>
+}
+
+
+  const handleAdvertise =async (id) => {
+   
+    try{
+        const {data}=await axios.patch(`http://localhost:9000/properties/${id}/advertise`,{
+          isAdvertised: true
+        })
+        if(data.modifiedCount>0){
+          toast.success('Property added to advertisements');
+          refetch()
+        }
+    }
+    catch(error){
+      console.log(error)
+    }
   };
 
   return (
@@ -42,10 +70,10 @@ const AdvertiseProperty = () => {
       <h1 className="text-2xl font-bold mb-6">Advertise Properties</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {properties.map((property) => (
-          <div key={property.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+        {properties &&  properties.map((property) => (
+          <div key={property._id} className="bg-white rounded-lg shadow-md overflow-hidden">
             <img
-              src={property.image}
+              src={property.photoURL}
               alt={property.title}
               className="w-full h-48 object-cover"
             />
@@ -75,7 +103,7 @@ const AdvertiseProperty = () => {
               </div>
               {!property.isAdvertised && (
                 <button
-                  onClick={() => handleAdvertise(property.id)}
+                  onClick={() => handleAdvertise(property._id)}
                   className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex items-center justify-center"
                 >
                   <Megaphone className="w-4 h-4 mr-2" />

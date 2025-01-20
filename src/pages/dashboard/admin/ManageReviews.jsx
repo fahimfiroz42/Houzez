@@ -1,38 +1,73 @@
-import { useState } from 'react';
+
 import { Star, Trash2 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { format } from 'date-fns';
+import Swal from 'sweetalert2';
+import Loading from '../../../components/shared/Loading';
 
 const ManageReviews = () => {
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      propertyTitle: "Luxury Villa with Pool",
-      reviewerName: "Emily Brown",
-      reviewerEmail: "emily@example.com",
-      reviewerImage:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3",
-      rating: 5,
-      comment:
-        "Amazing property with excellent amenities. The agent was very professional and helpful throughout the process.",
-      date: "2024-02-15",
-    },
-    {
-      id: 2,
-      propertyTitle: "Modern Downtown Apartment",
-      reviewerName: "Michael Clark",
-      reviewerEmail: "michael@example.com",
-      reviewerImage:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3",
-      rating: 4,
-      comment:
-        "Great location and modern design. The process was smooth but took a bit longer than expected.",
-      date: "2024-02-10",
-    },
-  ]);
+ 
 
-  const handleDelete = (id) => {
-    setReviews(reviews.filter((review) => review.id !== id));
-    toast.success("Review deleted successfully");
+
+ 
+  const {data:reviews,refetch,isLoading}=useQuery({
+    queryKey:['reviews'],
+    queryFn: async () => {
+        const {data}=await axios.get(`http://localhost:9000/reviews`)
+        return data
+  }
+  
+  }
+  )
+
+
+  if(isLoading){
+    return <Loading/>
+  }
+   
+
+  const handleDelete = async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      });
+  
+      if (result.isConfirmed) {
+        // Wait for the delete request to complete
+        const { data } = await axios.delete(`http://localhost:9000/reviews/${id}`);
+  
+        // Check if the deletion was successful
+        if (data.deletedCount > 0) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your review has been deleted.",
+            icon: "success"
+          });
+          // Refetch the data to reflect changes
+          refetch();
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Failed to delete the review.",
+            icon: "error"
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting the review:", error);
+      Swal.fire({
+        title: "Error",
+        text: "An unexpected error occurred.",
+        icon: "error"
+      });
+    }
   };
 
   return (
@@ -40,22 +75,22 @@ const ManageReviews = () => {
       <h1 className="text-2xl font-bold mb-6">Manage Reviews</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {reviews.map((review) => (
+        {reviews && reviews.map((review) => (
           <div key={review.id} className="bg-white rounded-lg shadow-md p-6">
             <div className="flex justify-between items-start mb-4">
               <div className="flex items-center">
                 <img
-                  src={review.reviewerImage}
-                  alt={review.reviewerName}
-                  className="w-12 h-12 rounded-full mr-4"
+                  src={review.userImage}
+                  alt={review.userName}
+                  className="w-12 h-12 rounded-full mr-4 object-cover"
                 />
                 <div>
-                  <h3 className="font-semibold">{review.reviewerName}</h3>
-                  <p className="text-sm text-gray-500">{review.reviewerEmail}</p>
+                  <h3 className="font-semibold">{review.userName}</h3>
+                  <p className="text-sm text-gray-500">{review.userEmail}</p>
                 </div>
               </div>
               <button
-                onClick={() => handleDelete(review.id)}
+                onClick={() => handleDelete(review._id)}
                 className="text-red-500 hover:text-red-600"
               >
                 <Trash2 className="w-5 h-5" />
@@ -78,7 +113,7 @@ const ManageReviews = () => {
                 />
               ))}
               <span className="text-sm text-gray-500 ml-2">
-                {new Date(review.date).toLocaleDateString()}
+                {format(new Date(review.date), "MMM dd, yyyy")}
               </span>
             </div>
             <p className="text-gray-600">{review.comment}</p>

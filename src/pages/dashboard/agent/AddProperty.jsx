@@ -73,7 +73,8 @@ const AddProperty = () => {
           max: priceMax,
         },
         agentName: user?.displayName,
-        agentEmail: user?.email
+        agentEmail: user?.email,
+        isAdvertised: false,
       };
   
       // Submit property data
