@@ -22,6 +22,7 @@ import ManageReviews from '../pages/dashboard/admin/ManageReviews';
 import AdvertiseProperty from '../pages/dashboard/admin/AdvertiseProperty';
 import AllProperties from '../pages/Allproperties';
 import MakeOffer from '../pages/dashboard/user/MakeOffer';
+import PrivateRoute from './PrivateRoutes';
 
 const Routes = createBrowserRouter([
     {
@@ -43,18 +44,18 @@ const Routes = createBrowserRouter([
         },
         {
             path:'/property/:id',
-            element:<PropertyDetails/>
+            element:<PrivateRoute><PropertyDetails/></PrivateRoute>
         },
         {
             path:'/all-properties',
-            element:<AllProperties/>
+            element:<PrivateRoute><AllProperties/></PrivateRoute>
         }
       ]
     },
 
     {
         path:'/dashboard',
-        element:<DashboardLayout/>,
+        element:<PrivateRoute><DashboardLayout/> </PrivateRoute>,
         children:[
            // User routes
       {
