@@ -1,6 +1,7 @@
 
 import Advertisement from '../components/Advertisement';
 import Banner from '../components/Banner';
+import GridSection from '../components/Gallery';
 import LatestReview from '../components/LatestReview';
 import MeetOurAgents from '../components/MeetOurAgents';
 import ParallaxSection from '../components/ParallaxSection';
@@ -13,6 +14,7 @@ const Home = () => {
             <Advertisement/>
             <ParallaxSection/>
             <LatestReview/>
+            <GridSection/>
             <MeetOurAgents/>
             <WhyChooseUs/>
         </div>
