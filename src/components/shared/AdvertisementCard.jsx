@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 const AdvertisementCard = ({property}) => {
     return (
-        <div key={property.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <img src={property.image} alt={property.title} className="w-full h-48 object-cover" />
+        <div key={property._id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <img src={property.photoURL} alt={property.title} className="w-full h-48 object-cover" />
         <div className="p-4">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-semibold">{property.title}</h3>
@@ -19,15 +19,15 @@ const AdvertisementCard = ({property}) => {
           </div>
           <div className="flex items-center text-gray-600 mb-4">
             <DollarSign className="w-4 h-4 mr-1" />
-            <span>{property.price}</span>
+            <span>{property.priceRange?.min} -{property.priceRange?.max} </span>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <img src={property.agent.image} alt={property.agent.name} className="w-8 h-8 rounded-full mr-2" />
-              <span className="text-sm text-gray-600">{property.agent.name}</span>
+              <img src={property.agentImage} alt={property.agentName} className="w-8 h-8 rounded-full mr-2" />
+              <span className="text-sm text-gray-600">{property.agentName}</span>
             </div>
             <Link
-              to={`/property/${property.id}`}
+              to={`/property/${property._id}`}
               className="text-blue-500 hover:text-blue-600 text-sm font-medium"
             >
               View Details
