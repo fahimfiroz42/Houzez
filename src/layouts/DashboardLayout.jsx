@@ -8,7 +8,7 @@ const DashboardLayout = () => {
   const { user } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const role = 'user';
+  const role = 'agent';
 
   return (
     <div className="min-h-screen bg-gray-100">

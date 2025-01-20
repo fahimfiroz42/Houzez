@@ -104,7 +104,7 @@ const handleSearch = (e) => {
                 </div>
                 <div className="flex items-center text-gray-600 mb-4">
                   <DollarSign className="w-4 h-4 mr-1" />
-                  <span>{property.priceRange.min.toLocaleString()} - {property.priceRange.max.toLocaleString()}</span>
+                  <span>{property?.priceRange?.min?.toLocaleString()} - {property?.priceRange?.max?.toLocaleString()}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">

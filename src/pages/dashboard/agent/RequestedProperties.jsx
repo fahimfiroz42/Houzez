@@ -1,28 +1,46 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Check, X } from 'lucide-react';
 import toast from 'react-hot-toast';
-
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { AuthContext } from '../../../AuthPovider/AuthPovider';
+import Loading from '../../../components/shared/Loading';
 const RequestedProperties = () => {
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      title: "Luxury Villa with Pool",
-      location: "Beverly Hills, CA",
-      buyerEmail: "buyer@example.com",
-      buyerName: "John Smith",
-      offeredPrice: 2750000,
-      status: 'pending'
-    },
-    {
-      id: 2,
-      title: "Modern Downtown Apartment",
-      location: "Manhattan, NY",
-      buyerEmail: "buyer2@example.com",
-      buyerName: "Sarah Johnson",
-      offeredPrice: 925000,
-      status: 'pending'
-    }
-  ]);
+
+  const {user}=useContext(AuthContext)
+  // const [requests, setRequests] = useState([
+  //   {
+  //     id: 1,
+  //     title: "Luxury Villa with Pool",
+  //     location: "Beverly Hills, CA",
+  //     buyerEmail: "buyer@example.com",
+  //     buyerName: "John Smith",
+  //     offeredPrice: 2750000,
+  //     status: 'pending'
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Modern Downtown Apartment",
+  //     location: "Manhattan, NY",
+  //     buyerEmail: "buyer2@example.com",
+  //     buyerName: "Sarah Johnson",
+  //     offeredPrice: 925000,
+  //     status: 'pending'
+  //   }
+  // ]);
+
+  const {data:requests,isLoading}=useQuery({
+    queryKey:['requests'],
+    queryFn: async () => {
+        const {data}=await axios.get(`http://localhost:9000/offers?email=${user?.email}`)
+        return data
+  }
+  
+}
+)
+
+
+
 
   const handleAccept = (id) => {
     setRequests(requests.map(request => {
@@ -71,8 +89,8 @@ const RequestedProperties = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {requests.map((request) => (
-              <tr key={request.id}>
+            {requests && requests.map((request) => (
+              <tr key={request._id}>
                 <td className="px-6 py-4">
                   <div>
                     <p className="font-medium text-gray-900">{request.title}</p>
@@ -87,7 +105,7 @@ const RequestedProperties = () => {
                 </td>
                 <td className="px-6 py-4">
                   <p className="text-sm font-medium text-gray-900">
-                    ${request.offeredPrice.toLocaleString()}
+                    ${request.offerAmount.toLocaleString()}
                   </p>
                 </td>
                 <td className="px-6 py-4">
