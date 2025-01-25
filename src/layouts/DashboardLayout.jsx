@@ -3,12 +3,15 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../AuthPovider/AuthPovider';
+import useRole from '../hooks/useRole';
 
 const DashboardLayout = () => {
   const { user } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const role = 'agent';
+  const [role,isLoading]=useRole()
+  console.log(role);
+
 
   return (
     <div className="min-h-screen bg-gray-100">

@@ -23,6 +23,8 @@ import AdvertiseProperty from '../pages/dashboard/admin/AdvertiseProperty';
 import AllProperties from '../pages/Allproperties';
 import MakeOffer from '../pages/dashboard/user/MakeOffer';
 import PrivateRoute from './PrivateRoutes';
+import AgentRoute from './AgentRoute';
+import AdminRoute from './AdminRoute';
 
 const Routes = createBrowserRouter([
     {
@@ -90,19 +92,19 @@ const Routes = createBrowserRouter([
       },
       {
         path: 'agent/add-property',
-        element: <AddProperty />,
+        element:<AgentRoute><AddProperty /> </AgentRoute> ,
       },
       {
         path: 'agent/my-properties',
-        element: <MyAddedProperties />,
+        element:<AgentRoute>  <MyAddedProperties /></AgentRoute> ,
       },
       {
         path: 'agent/sold-properties',
-        element: <MySoldProperties />,
+        element:<AgentRoute> <MySoldProperties /> </AgentRoute>,
       },
       {
         path: 'agent/requested-properties',
-        element: <RequestedProperties />,
+        element:<AgentRoute> <RequestedProperties /></AgentRoute>,
       },
       // Admin routes
       {
@@ -111,19 +113,19 @@ const Routes = createBrowserRouter([
       },
       {
         path: 'admin/manage-properties',
-        element: <ManageProperties />,
+        element:<AdminRoute> <ManageProperties /> </AdminRoute>,
       },
       {
         path: 'admin/manage-users',
-        element: <ManageUsers />,
+        element:<AdminRoute> <ManageUsers /></AdminRoute>,
       },
       {
         path: 'admin/manage-reviews',
-        element: <ManageReviews />,
+        element: <AdminRoute> <ManageReviews /></AdminRoute>,
       },
       {
         path: 'admin/advertise-property',
-        element: <AdvertiseProperty />,
+        element:<AdminRoute> <AdvertiseProperty /> </AdminRoute> ,
       }
         ]
     }

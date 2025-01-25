@@ -1,46 +1,41 @@
 import { useState } from 'react';
 import { Shield, UserPlus, AlertTriangle, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import Loading from '../../../components/shared/Loading';
 
 const ManageUsers = () => {
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      role: 'user',
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      role: 'agent',
-    },
-    {
-      id: 3,
-      name: "Mike Johnson",
-      email: "mike@example.com",
-      role: 'agent',
-      isFraud: true,
-    },
-  ]);
 
-  const handleMakeAdmin = (id) => {
-    setUsers(
-      users.map((user) =>
-        user.id === id ? { ...user, role: 'admin' } : user
-      )
-    );
-    toast.success('User promoted to admin');
+
+  
+  const {data:users,isLoading,refetch}=useQuery({
+    queryKey:['users'],
+    queryFn: async () => {
+        const {data}=await axios.get(`http://localhost:9000/users`)
+        return data
+  }
+  
+}
+)
+  if(isLoading){
+    return <Loading/>
+  }
+
+  const handleMakeAdmin =async (id) => {
+    const {data}= await axios.patch(`http://localhost:9000/user/${id}`,{role:'admin'})
+    if(data.modifiedCount>0){
+      toast.success('User promoted to admin');
+      refetch()
+    } 
   };
 
-  const handleMakeAgent = (id) => {
-    setUsers(
-      users.map((user) =>
-        user.id === id ? { ...user, role: 'agent' } : user
-      )
-    );
-    toast.success('User promoted to agent');
+  const handleMakeAgent = async (id) => {
+    const {data}= await axios.patch(`http://localhost:9000/user/${id}`,{role:'agent'})
+    if(data.modifiedCount>0){
+      toast.success('User promoted to agent');
+      refetch()
+    } 
   };
 
   const handleMarkAsFraud = (id) => {
@@ -52,9 +47,12 @@ const ManageUsers = () => {
     toast.success('User marked as fraud');
   };
 
-  const handleDeleteUser = (id) => {
-    setUsers(users.filter((user) => user.id !== id));
-    toast.success('User deleted successfully');
+  const handleDeleteUser =async (id) => {
+    const {data}= await axios.delete(`http://localhost:9000/user/${id}`)
+    if(data.deletedCount>0){
+      toast.success('User deleted successfully');
+      refetch()
+    }
   };
 
   return (
@@ -80,7 +78,7 @@ const ManageUsers = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {users.map((user) => (
+            {users &&  users.map((user) => (
               <tr key={user.id}>
                 <td className="px-6 py-4">
                   <div>
@@ -118,7 +116,7 @@ const ManageUsers = () => {
                   <div className="flex space-x-2">
                     {!user.isFraud && user.role !== 'admin' && (
                       <button
-                        onClick={() => handleMakeAdmin(user.id)}
+                        onClick={() => handleMakeAdmin(user._id)}
                         className="bg-purple-500 text-white p-2 rounded-md hover:bg-purple-600"
                         title="Make Admin"
                       >
@@ -127,7 +125,7 @@ const ManageUsers = () => {
                     )}
                     {!user.isFraud && user.role === 'user' && (
                       <button
-                        onClick={() => handleMakeAgent(user.id)}
+                        onClick={() => handleMakeAgent(user._id)}
                         className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
                         title="Make Agent"
                       >
@@ -136,7 +134,7 @@ const ManageUsers = () => {
                     )}
                     {user.role === 'agent' && !user.isFraud && (
                       <button
-                        onClick={() => handleMarkAsFraud(user.id)}
+                        onClick={() => handleMarkAsFraud(user._id)}
                         className="bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600"
                         title="Mark as Fraud"
                       >
@@ -144,7 +142,7 @@ const ManageUsers = () => {
                       </button>
                     )}
                     <button
-                      onClick={() => handleDeleteUser(user.id)}
+                      onClick={() => handleDeleteUser(user._id)}
                       className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
                       title="Delete User"
                     >

@@ -2,9 +2,12 @@ import { User, Mail, Phone, Calendar } from 'lucide-react';
 
 import { useContext } from 'react';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
+import useRole from '../../../hooks/useRole';
 
 const UserProfile = () => {
+  const [role]=useRole()
   const { user } = useContext(AuthContext);
+  console.log(user);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -24,7 +27,7 @@ const UserProfile = () => {
               </div>
             )}
             <h1 className="text-2xl font-bold">{user?.displayName || 'User'}</h1>
-            <span className="text-gray-500">Regular User</span>
+            <span className="text-gray-500">{role}</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
