@@ -6,12 +6,13 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
 import Loading from '../../../components/shared/Loading';
+import Swal from 'sweetalert2';
 
 const MyAddedProperties = () => {
     const {user}=useContext(AuthContext)
  
 
-  const {data:properties,isLoading}=useQuery({
+  const {data:properties,isLoading,refetch}=useQuery({
     queryKey:['properties'],
     queryFn: async () => {
         const {data}=await axios.get(`http://localhost:9000/property/${user?.email}`)
@@ -25,9 +26,48 @@ if(isLoading){
     return <Loading/>
 }
 
-  const handleDelete = (id) => {
-    setProperties(properties.filter(property => property.id !== id));
-    toast.success('Property deleted successfully');
+  const handleDelete =async (id) => {
+
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      });
+  
+      if (result.isConfirmed) {
+      
+        const { data } = await axios.delete(`http://localhost:9000/properties/${id}`);
+  
+        if (data.deletedCount > 0) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your property has been deleted.",
+            icon: "success"
+          });
+     
+          refetch();
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Failed to delete the property.",
+            icon: "error"
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting the review:", error);
+      Swal.fire({
+        title: "Error",
+        text: "An unexpected error occurred.",
+        icon: "error"
+      });
+    }
+
   };
 
   const getStatusBadge = (status) => {

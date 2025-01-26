@@ -40,17 +40,16 @@ const ManageReviews = () => {
       });
   
       if (result.isConfirmed) {
-        // Wait for the delete request to complete
+      
         const { data } = await axios.delete(`http://localhost:9000/reviews/${id}`);
   
-        // Check if the deletion was successful
         if (data.deletedCount > 0) {
           Swal.fire({
             title: "Deleted!",
             text: "Your review has been deleted.",
             icon: "success"
           });
-          // Refetch the data to reflect changes
+     
           refetch();
         } else {
           Swal.fire({
