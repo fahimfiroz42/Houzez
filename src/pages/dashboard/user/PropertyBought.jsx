@@ -54,7 +54,7 @@ const PropertyBought = () => {
   const {data:properties,isLoading,refetch}=useQuery({
     queryKey:['properties'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/offers/${user?.email}`)
+        const {data}=await axios.get(`https://houzez-server.vercel.app/offers/${user?.email}`)
         return data
   }
   
@@ -178,7 +178,7 @@ if(isLoading){
                 </div>
                 <div className="flex items-center text-gray-600 mb-4">
                   <DollarSign className="w-4 h-4 mr-1" />
-                  <span>Offered Amount: ${property.offerAmount.toLocaleString()}</span>
+                  <span>Offered Amount: ${property?.offerAmount}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">

@@ -15,7 +15,7 @@ const AllProperties = () => {
   const {data:properties,isLoading,refetch}=useQuery({
     queryKey:['properties'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/properties?verify=verified&search=${searchLocation}&sortByPrice=${sortOrder}`)
+        const {data}=await axios.get(`https://houzez-server.vercel.app/properties?verify=verified&search=${searchLocation}&sortByPrice=${sortOrder}`)
         return data
   }
   

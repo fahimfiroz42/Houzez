@@ -32,7 +32,7 @@ const RequestedProperties = () => {
   const {data:requests,isLoading,refetch}=useQuery({
     queryKey:['requests'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/offers?email=${user?.email}`)
+        const {data}=await axios.get(`https://houzez-server.vercel.app/offers?email=${user?.email}`)
         return data
   }
   
@@ -50,7 +50,7 @@ if(isLoading){
 
     try {
 
-      const { data } = await axios.patch(`http://localhost:9000/offers/${id}/accept`, {
+      const { data } = await axios.patch(`https://houzez-server.vercel.app/offers/${id}/accept`, {
         propertyId,
       });
 
@@ -68,7 +68,7 @@ if(isLoading){
   const handleReject = async (id,propertyId) => {
     try {
 
-      const { data } = await axios.patch(`http://localhost:9000/offers/${id}/reject`, {
+      const { data } = await axios.patch(`https://houzez-server.vercel.app/offers/${id}/reject`, {
         propertyId,
       });
 

@@ -16,7 +16,7 @@ const Wishlist = () => {
   const {data:wishlistItems,isLoading}=useQuery({
     queryKey:['wishlistItems'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/wishlist/${user?.email}`)
+        const {data}=await axios.get(`https://houzez-server.vercel.app/wishlist/${user?.email}`)
         return data
   }
   

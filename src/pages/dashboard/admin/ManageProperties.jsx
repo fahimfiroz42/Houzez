@@ -2,15 +2,16 @@ import { useState } from 'react';
 import { Check, X, Shield } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+
 import Loading from '../../../components/shared/Loading';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const ManageProperties = () => {
- 
+  const axiosSecure = useAxiosSecure();
   const {data:properties,isLoading,refetch}=useQuery({
     queryKey:['properties'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/properties`)
+        const {data}=await axiosSecure.get(`/properties`)
         return data
   }
   
@@ -26,7 +27,7 @@ if(isLoading){
 
   const handleVerify = async (id) => {
 
-    const {data}=await axios.patch(`http://localhost:9000/properties/${id}`,{
+    const {data}=await axiosSecure.patch(`/properties/${id}`,{
         verificationStatus: "verified",
       })
     if(data.modifiedCount>0){
@@ -37,7 +38,7 @@ if(isLoading){
   };
 
   const handleReject =async (id) => {
-    const {data}=await axios.patch(`http://localhost:9000/properties/${id}`,{
+    const {data}=await axiosSecure.patch(`/properties/${id}`,{
         verificationStatus: "rejected",
       })
     if(data.modifiedCount>0){
@@ -89,7 +90,7 @@ if(isLoading){
                 </td>
                 <td className="px-6 py-4">
                   <p className="text-sm text-gray-900">
-                    ${property.priceRange.min.toLocaleString()} - ${property.priceRange.max.toLocaleString()}
+                    ${property?.priceRange?.min} - ${property?.priceRange?.max}
                   </p>
                 </td>
                 <td className="px-6 py-4">

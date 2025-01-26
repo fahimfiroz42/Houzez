@@ -13,7 +13,7 @@ const MyReviews = () => {
   const {data:reviews,refetch}=useQuery({
     queryKey:['reviews'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/allreviews/${user?.email}`)
+        const {data}=await axios.get(`https://houzez-server.vercel.app/allreviews/${user?.email}`)
         return data
   }
   
@@ -39,7 +39,7 @@ const MyReviews = () => {
   
       if (result.isConfirmed) {
         // Wait for the delete request to complete
-        const { data } = await axios.delete(`http://localhost:9000/reviews/${id}`);
+        const { data } = await axios.delete(`https://houzez-server.vercel.app/reviews/${id}`);
   
         // Check if the deletion was successful
         if (data.deletedCount > 0) {

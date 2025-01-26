@@ -10,12 +10,12 @@ import UserProfile from '../pages/dashboard/user/UserProfile';
 import Wishlist from '../pages/dashboard/user/Wishlist';
 import PropertyBought from '../pages/dashboard/user/PropertyBought';
 import MyReviews from '../pages/dashboard/user/MyReviews';
-import AgentProfile from '../pages/dashboard/agent/AgentProfile';
+
 import AddProperty from '../pages/dashboard/agent/AddProperty';
 import MyAddedProperties from '../pages/dashboard/agent/MyAddedProperties';
 import MySoldProperties from '../pages/dashboard/agent/MySoldProperties';
 import RequestedProperties from '../pages/dashboard/agent/RequestedProperties';
-import AdminProfile from '../pages/dashboard/admin/AdminProfile';
+
 import ManageProperties from '../pages/dashboard/admin/ManageProperties';
 import ManageUsers from '../pages/dashboard/admin/ManageUsers';
 import ManageReviews from '../pages/dashboard/admin/ManageReviews';
@@ -63,74 +63,74 @@ const Routes = createBrowserRouter([
            // User routes
       {
         index: true,
-        element: <UserProfile />,
+        element: <PrivateRoute><UserProfile /></PrivateRoute>,
       },
       {
         path: 'user/profile',
-        element: <UserProfile />,
+        element: <PrivateRoute><UserProfile /></PrivateRoute>,
       },
       {
         path: 'user/wishlist',
-        element: <Wishlist />,
+        element:<PrivateRoute> <Wishlist /> </PrivateRoute> ,
       },
       {
         path:'user/make-offer/:id',
-        element:<MakeOffer/>
+        element:<PrivateRoute> <MakeOffer/> </PrivateRoute>
 
       },
       {
         path: 'user/property-bought',
-        element: <PropertyBought />,
+        element:<PrivateRoute> <PropertyBought /> </PrivateRoute>,
       },
       {
         path: 'user/reviews',
-        element: <MyReviews />,
+        element:<PrivateRoute> <MyReviews /> </PrivateRoute>,
       },
       // Agent routes
       {
         path: 'agent/profile',
-        element: <AgentProfile />,
+        element:<PrivateRoute> <UserProfile /></PrivateRoute> ,
       },
       {
         path: 'agent/add-property',
-        element:<AgentRoute><AddProperty /> </AgentRoute> ,
+        element:<PrivateRoute> <AgentRoute> <AddProperty /> </AgentRoute> </PrivateRoute>   ,
       },
       {
         path: 'agent/my-properties',
-        element:<AgentRoute>  <MyAddedProperties /></AgentRoute> ,
+        element:<PrivateRoute>  <AgentRoute>  <MyAddedProperties /></AgentRoute> </PrivateRoute> ,
       },
       {
         path: 'agent/sold-properties',
-        element:<AgentRoute> <MySoldProperties /> </AgentRoute>,
+        element: <PrivateRoute>  <AgentRoute> <MySoldProperties /> </AgentRoute> </PrivateRoute>,
       },
       {
         path: 'agent/requested-properties',
-        element:<AgentRoute> <RequestedProperties /></AgentRoute>,
+        element:<PrivateRoute>  <AgentRoute> <RequestedProperties /></AgentRoute> </PrivateRoute>,
       },
       {
         path: 'agent/update-property/:id',
-        element:<AgentRoute> <UpdateProperty /> </AgentRoute>,
+        element:<PrivateRoute> <AgentRoute> <UpdateProperty /> </AgentRoute> </PrivateRoute>,
       },
       // Admin routes
       {
         path: 'admin/profile',
-        element: <AdminProfile />,
+        element:<PrivateRoute> <UserProfile /> </PrivateRoute> ,
       },
       {
         path: 'admin/manage-properties',
-        element:<AdminRoute> <ManageProperties /> </AdminRoute>,
+        element:<PrivateRoute>  <AdminRoute> <ManageProperties /> </AdminRoute> </PrivateRoute>,
       },
       {
         path: 'admin/manage-users',
-        element:<AdminRoute> <ManageUsers /></AdminRoute>,
+        element:<PrivateRoute>  <AdminRoute> <ManageUsers /></AdminRoute>  </PrivateRoute>,
       },
       {
         path: 'admin/manage-reviews',
-        element: <AdminRoute> <ManageReviews /></AdminRoute>,
+        element:<PrivateRoute> <AdminRoute> <ManageReviews /></AdminRoute> </PrivateRoute>,
       },
       {
         path: 'admin/advertise-property',
-        element:<AdminRoute> <AdvertiseProperty /> </AdminRoute> ,
+        element :<PrivateRoute> <AdminRoute> <AdvertiseProperty /> </AdminRoute> </PrivateRoute> ,
       }
         ]
     }

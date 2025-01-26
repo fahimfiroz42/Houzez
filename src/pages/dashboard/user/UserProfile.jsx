@@ -66,7 +66,7 @@ const UserProfile = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold mb-2">Properties Viewed</h3>
           <p className="text-3xl font-bold text-blue-500">24</p>
@@ -79,7 +79,7 @@ const UserProfile = () => {
           <h3 className="text-lg font-semibold mb-2">Properties Bought</h3>
           <p className="text-3xl font-bold text-blue-500">2</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

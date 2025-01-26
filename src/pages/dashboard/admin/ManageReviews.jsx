@@ -5,16 +5,17 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import Swal from 'sweetalert2';
 import Loading from '../../../components/shared/Loading';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const ManageReviews = () => {
- 
+  const axiosSecure = useAxiosSecure();
 
 
  
   const {data:reviews,refetch,isLoading}=useQuery({
     queryKey:['reviews'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/reviews`)
+        const {data}=await axiosSecure.get(`/reviews`)
         return data
   }
   
@@ -41,7 +42,7 @@ const ManageReviews = () => {
   
       if (result.isConfirmed) {
       
-        const { data } = await axios.delete(`http://localhost:9000/reviews/${id}`);
+        const { data } = await axiosSecure.delete(`/reviews/${id}`);
   
         if (data.deletedCount > 0) {
           Swal.fire({

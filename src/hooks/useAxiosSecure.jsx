@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { AuthContext } from "../AuthPovider/AuthPovider";
 
 const axiosSecure = axios.create({
-    baseURL: 'http://localhost:9000'
+    baseURL: 'https://houzez-server.vercel.app'
 })
 const useAxiosSecure = () => {
     const navigate = useNavigate();

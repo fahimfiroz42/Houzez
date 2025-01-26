@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Loading from '../../../components/shared/Loading';
 import { ca } from 'date-fns/locale';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const AdvertiseProperty = () => {
   // const [properties, setProperties] = useState([
@@ -34,10 +35,11 @@ const AdvertiseProperty = () => {
   //   }
   // ]);
 
+  const axiosSecure = useAxiosSecure();
   const {data:properties,isLoading,refetch}=useQuery({
     queryKey:['properties'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/properties?verify=verified`)
+        const {data}=await axiosSecure.get(`/properties?verify=verified`)
         return data
   }
   
@@ -52,7 +54,7 @@ if(isLoading){
   const handleAdvertise =async (id) => {
    
     try{
-        const {data}=await axios.patch(`http://localhost:9000/properties/${id}/advertise`,{
+        const {data}=await axiosSecure.patch(`/properties/${id}/advertise`,{
           isAdvertised: true
         })
         if(data.modifiedCount>0){

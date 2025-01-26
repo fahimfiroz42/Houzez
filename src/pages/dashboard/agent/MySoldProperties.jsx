@@ -14,7 +14,7 @@ const MySoldProperties = () => {
   const {data:soldProperties,isLoading}=useQuery({
     queryKey:['soldProperties'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/offers?email=${user?.email}&status=bought`)
+        const {data}=await axios.get(`https://houzez-server.vercel.app/offers?email=${user?.email}&status=bought`)
         return data
   }
   

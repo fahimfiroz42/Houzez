@@ -4,15 +4,16 @@ import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Loading from '../../../components/shared/Loading';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const ManageUsers = () => {
 
-
+  const axiosSecure = useAxiosSecure();
   
   const {data:users,isLoading,refetch}=useQuery({
     queryKey:['users'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/users`)
+        const {data}=await axiosSecure.get(`/users`)
         return data
   }
   
@@ -23,7 +24,7 @@ const ManageUsers = () => {
   }
 
   const handleMakeAdmin =async (id) => {
-    const {data}= await axios.patch(`http://localhost:9000/user/${id}`,{role:'admin'})
+    const {data}= await axiosSecure.patch(`/user/${id}`,{role:'admin'})
     if(data.modifiedCount>0){
       toast.success('User promoted to admin');
       refetch()
@@ -31,7 +32,7 @@ const ManageUsers = () => {
   };
 
   const handleMakeAgent = async (id) => {
-    const {data}= await axios.patch(`http://localhost:9000/user/${id}`,{role:'agent'})
+    const {data}= await axiosSecure.patch(`/user/${id}`,{role:'agent'})
     if(data.modifiedCount>0){
       toast.success('User promoted to agent');
       refetch()
@@ -48,7 +49,7 @@ const ManageUsers = () => {
   };
 
   const handleDeleteUser =async (id) => {
-    const {data}= await axios.delete(`http://localhost:9000/user/${id}`)
+    const {data}= await axiosSecure.delete(`/user/${id}`)
     if(data.deletedCount>0){
       toast.success('User deleted successfully');
       refetch()

@@ -36,7 +36,7 @@ const MakeOffer = () => {
   const {data:property,isLoading}=useQuery({
     queryKey:['property'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/wishlists/${id}`)
+        const {data}=await axios.get(`https://houzez-server.vercel.app/wishlists/${id}`)
         return data
   }
   
@@ -85,7 +85,7 @@ const {priceRange}=property||{}
       status: "pending",
     };
   
-   const {data}= await axios.post(`http://localhost:9000/offers`,offerData)
+   const {data}= await axios.post(`https://houzez-server.vercel.app/offers`,offerData)
    if(data.insertedId){ 
       toast.success('Offer submitted successfully');
     }

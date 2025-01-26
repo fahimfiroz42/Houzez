@@ -9,7 +9,7 @@ const useRole = () => {
     const {data:role,isLoading}=useQuery({
        queryKey:['role',user?.email],
        queryFn: async () => {
-           const {data}=await axios.get(`http://localhost:9000/user/role/${user?.email}`) 
+           const {data}=await axios.get(`https://houzez-server.vercel.app/user/role/${user?.email}`) 
            return data.role
        }
 

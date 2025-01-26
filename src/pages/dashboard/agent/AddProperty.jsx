@@ -5,12 +5,14 @@ import { Building2, MapPin, DollarSign, Upload, User, Mail } from 'lucide-react'
 import toast from 'react-hot-toast';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
 import axios from 'axios';
-import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+
 
 const AddProperty = () => {
   const { user } = useContext(AuthContext);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
+  const navigate = useNavigate();
 
   const {
     register,
@@ -37,7 +39,7 @@ const AddProperty = () => {
       const image = selectedImage;
       let photoURL = '';
   
-      // Upload image to ImgBB
+   
       if (image) {
         const formData = new FormData();
         formData.append('image', image);
@@ -48,25 +50,25 @@ const AddProperty = () => {
         );
   
         photoURL = imgResponse.data.display_url;
-        console.log('Uploaded Photo URL:', photoURL);
+      
       }
   
-      // Extract price range as numbers
+  
       const priceMin = parseFloat(data.priceMin);
       const priceMax = parseFloat(data.priceMax);
   
-      // Check if the price range is valid
+
       if (priceMin > priceMax) {
         toast.error('Minimum price cannot be greater than maximum price');
         return;
       }
   
-      // Prepare data to submit to the backend
+     
       const updatedData = {
-        ...data, // Existing form data
+        ...data, 
         photoURL,
-        agentImage: user?.photoURL, // Image URL
-        verified: false, // Additional fields
+        agentImage: user?.photoURL, 
+        verified: false, 
         verificationStatus: 'pending',
         priceRange: {
           min: priceMin,
@@ -77,11 +79,12 @@ const AddProperty = () => {
         isAdvertised: false,
       };
   
-      // Submit property data
-      const { data: propertyResponse } = await axios.post('http://localhost:9000/properties', updatedData);
+
+      const { data: propertyResponse } = await axios.post('https://houzez-server.vercel.app/properties', updatedData);
   
       if (propertyResponse.insertedId) {
         toast.success('Property added successfully');
+        navigate(`/dashboard/agent/my-properties`);
       }
     } catch (error) {
       console.error('Error:', error.response?.data || error.message);

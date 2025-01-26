@@ -19,7 +19,7 @@ const CheckoutForm = ({purchaseInfo, refetch}) => {
 
   const getPaymentIntent = async () => {
     try {
-        const {data}=await axios.post(`http://localhost:9000/create-payment-intent`,{
+        const {data}=await axios.post(`https://houzez-server.vercel.app/create-payment-intent`,{
         offerAmount:purchaseInfo?.offerAmount 
         })
         setClientSecret(data.clientSecret);
@@ -82,7 +82,7 @@ const CheckoutForm = ({purchaseInfo, refetch}) => {
       if(paymentIntent.status === 'succeeded'){
         try {
 
-        const { data } = await axios.patch(`http://localhost:9000/offers/${purchaseInfo?._id}/bought`, {
+        const { data } = await axios.patch(`https://houzez-server.vercel.app/offers/${purchaseInfo?._id}/bought`, {
               transactionId: paymentIntent?.id
             });
       

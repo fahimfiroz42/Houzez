@@ -15,7 +15,7 @@ const MyAddedProperties = () => {
   const {data:properties,isLoading,refetch}=useQuery({
     queryKey:['properties'],
     queryFn: async () => {
-        const {data}=await axios.get(`http://localhost:9000/property/${user?.email}`)
+        const {data}=await axios.get(`https://houzez-server.vercel.app/property/${user?.email}`)
         return data
   }
   
@@ -41,7 +41,7 @@ if(isLoading){
   
       if (result.isConfirmed) {
       
-        const { data } = await axios.delete(`http://localhost:9000/properties/${id}`);
+        const { data } = await axios.delete(`https://houzez-server.vercel.app/properties/${id}`);
   
         if (data.deletedCount > 0) {
           Swal.fire({

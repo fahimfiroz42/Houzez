@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Building2, MapPin, DollarSign, Upload, User, Mail, CheckSquare } from 'lucide-react';
+import { Building2, MapPin, DollarSign, Upload, User, Mail } from 'lucide-react';
 
 import toast from 'react-hot-toast';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
@@ -9,7 +9,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 const UpdateProperty = () => {
   const { user } = useContext(AuthContext);
-  const { id } = useParams(); // Assuming the property ID is passed as a route parameter
+  const { id } = useParams(); 
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
@@ -23,14 +23,12 @@ const UpdateProperty = () => {
   } = useForm();
 
   useEffect(() => {
-    // Fetch the property data to populate the form
+   
     const fetchPropertyData = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:9000/propertie/${id}`);
+        const { data } = await axios.get(`https://houzez-server.vercel.app/propertie/${id}`);
         setInitialData(data);
         setImagePreview(data.photoURL);
-
-        // Set default form values
         setValue('title', data.title);
         setValue('location', data.location);
         setValue('priceMin', data.priceRange.min);
@@ -57,7 +55,6 @@ const UpdateProperty = () => {
     try {
       let photoURL = initialData.photoURL;
 
-      // Upload new image if selected
       if (selectedImage) {
         const formData = new FormData();
         formData.append('image', selectedImage);
@@ -70,7 +67,6 @@ const UpdateProperty = () => {
         photoURL = imgResponse.data.display_url;
       }
 
-      // Validate price range
       const priceMin = parseFloat(data.priceMin);
       const priceMax = parseFloat(data.priceMax);
 
@@ -79,7 +75,6 @@ const UpdateProperty = () => {
         return;
       }
 
-      // Prepare updated data
       const updatedData = {
         ...data,
         photoURL,
@@ -88,16 +83,14 @@ const UpdateProperty = () => {
           max: priceMax,
         },
       };
-
-      // Update property data
       const { data: updateResponse } = await axios.patch(
-        `http://localhost:9000/property/${id}`,
+        `https://houzez-server.vercel.app/property/${id}`,
         updatedData
       );
 
       if (updateResponse.modifiedCount > 0) {
         toast.success('Property updated successfully');
-        navigate(`/dashboard//agent/my-properties`); // Redirect to property details page
+        navigate(`/dashboard/agent/my-properties`);
       }
     } catch (error) {
       console.error('Error updating property:', error.response?.data || error.message);
