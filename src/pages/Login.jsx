@@ -5,6 +5,7 @@ import { Building2, Mail, Lock, Disc3 } from 'lucide-react';
 
 import toast from 'react-hot-toast';
 import { AuthContext } from '../AuthPovider/AuthPovider';
+import { saveUser } from '../utils/utils';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +32,9 @@ const Login = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      await googleLogin();
+      const data= await googleLogin();
+      await saveUser(data?.user)
+
       toast.success('Successfully logged in with Google!');
       navigate(from, { replace: true });
     } catch (error) {

@@ -6,6 +6,7 @@ import { Building2, Mail, Lock, User, Camera } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { AuthContext } from '../AuthPovider/AuthPovider';
 import axios from 'axios';
+import { saveUser } from '../utils/utils';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -43,8 +44,9 @@ const Register = () => {
       }
 
       // Create user and update profile
-      await registerUser(data.email, data.password);
+      const result= await registerUser(data.email, data.password);
       await updateUser(data.name, photoURL);
+      await saveUser({...result?.user,displayName:data.name,photoURL})
        
       toast.success('Successfully registered! please login to continue.');
 

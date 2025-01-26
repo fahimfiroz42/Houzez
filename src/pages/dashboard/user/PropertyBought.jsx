@@ -5,6 +5,11 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
 import Loading from '../../../components/shared/Loading';
+import {Elements} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+import CheckoutForm from '../../../components/shared/CheckoutForm';
+
+const stripePromise=loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
 const PropertyBought = () => {
 
@@ -46,7 +51,7 @@ const PropertyBought = () => {
   });
 
 
-  const {data:properties,isLoading}=useQuery({
+  const {data:properties,isLoading,refetch}=useQuery({
     queryKey:['properties'],
     queryFn: async () => {
         const {data}=await axios.get(`http://localhost:9000/offers/${user?.email}`)
@@ -195,7 +200,7 @@ if(isLoading){
                   )}
                   {property.status === 'bought' && (
                     <div className="text-sm text-gray-600">
-                      Transaction ID: {property.transactionId}
+                      Transaction ID: {property?.transactionId?.transactionId}
                     </div>
                   )}
                 </div>
@@ -295,16 +300,23 @@ if(isLoading){
                     required
                   />
                 </div>
-              </div>
+              </div> 
 
-              <button
+             
+
+              {/* <button
                 type="submit"
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 flex items-center justify-center"
               >
                 <CreditCard className="w-4 h-4 mr-2" />
                 Pay ${selectedProperty.offerAmount.toLocaleString()}
-              </button>
+              </button> */}
             </form>
+
+            <Elements stripe={stripePromise}>
+                <CheckoutForm  purchaseInfo={selectedProperty}  refetch={refetch}  />
+
+              </Elements> 
           </div>
         </div>
       )}

@@ -63,16 +63,19 @@ const userDelete=()=>{
             if(currentUser?.email){
                 setUser(currentUser)
 
-                axios.post(`http://localhost:9000/users/${currentUser?.email}`,{       name:currentUser?.displayName,
-                    image:currentUser?.photoURL,
-                    email:currentUser?.email,
-                    role:'user'
-                
-                })
-                .then(res=>{
-                    console.log(res.data)
-                })
-
+                if (currentUser) {
+                    // get token and store client
+                    const userInfo = { email: currentUser?.email };
+                    axios.post(' http://localhost:9000/jwt', userInfo)
+                        .then(res => {
+                            if (res.data.token) {
+                                localStorage.setItem('access-token', res.data.token);
+                            }
+                        })
+                }
+                else {
+                    localStorage.removeItem('access-token');
+                }
 
                 setLoading(false)
                 

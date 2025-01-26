@@ -1,35 +1,41 @@
-import axios from 'axios'
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-import { useContext, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { AuthContext } from '../AuthPovider/AuthPovider'
+import { useContext } from "react";
+import { AuthContext } from "../AuthPovider/AuthPovider";
 
-export const axiosSecure = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true,
+const axiosSecure = axios.create({
+    baseURL: 'http://localhost:9000'
 })
-
 const useAxiosSecure = () => {
-  const navigate = useNavigate()
-  const { logOut } = useContext(AuthContext)
-  useEffect(() => {
-    axiosSecure.interceptors.response.use(
-      res => {
-        return res
-      },
-      async error => {
-        console.log('Error caught from axios interceptor-->', error.response)
-        if (error.response.status === 401 || error.response.status === 403) {
-          // logout
-          logOut()
-          // navigate to login
-          navigate('/login')
-        }
-        return Promise.reject(error)
-      }
-    )
-  }, [logOut, navigate])
-  return axiosSecure
-}
+    const navigate = useNavigate();
+    const {  signOutUser } = useContext(AuthContext);
+    axiosSecure.interceptors.request.use(function (config) {
+        const token = localStorage.getItem('access-token')
+   
+        config.headers.authorization = `Bearer ${token}`;
+        return config;
+    }, function (error) {
+ 
+        return Promise.reject(error);
+    });
 
-export default useAxiosSecure
+
+   
+    axiosSecure.interceptors.response.use(function (response) {
+        return response;
+    }, async (error) => {
+        const status = error.response.status;
+       
+        if (status === 401 || status === 403) {
+            await  signOutUser();
+            navigate('/login');
+        }
+        return Promise.reject(error);
+    })
+
+
+    return axiosSecure;
+};
+
+export default useAxiosSecure;
