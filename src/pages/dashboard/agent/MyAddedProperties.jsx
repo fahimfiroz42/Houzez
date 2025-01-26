@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { MapPin, DollarSign, Shield, Pencil, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import toast from 'react-hot-toast';
+
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
@@ -123,7 +123,7 @@ if(isLoading){
               <div className="flex gap-2">
                 {property.verificationStatus !== 'rejected' && (
                   <Link
-                    to={`/dashboard/agent/edit-property/${property.id}`}
+                    to={`/dashboard/agent/update-property/${property._id}`}
                     className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex items-center justify-center"
                   >
                     <Pencil className="w-4 h-4 mr-2" />

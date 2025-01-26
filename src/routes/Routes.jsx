@@ -25,6 +25,7 @@ import MakeOffer from '../pages/dashboard/user/MakeOffer';
 import PrivateRoute from './PrivateRoutes';
 import AgentRoute from './AgentRoute';
 import AdminRoute from './AdminRoute';
+import UpdateProperty from '../pages/dashboard/agent/UpdateProperty';
 
 const Routes = createBrowserRouter([
     {
@@ -105,6 +106,10 @@ const Routes = createBrowserRouter([
       {
         path: 'agent/requested-properties',
         element:<AgentRoute> <RequestedProperties /></AgentRoute>,
+      },
+      {
+        path: 'agent/update-property/:id',
+        element:<AgentRoute> <UpdateProperty /> </AgentRoute>,
       },
       // Admin routes
       {
