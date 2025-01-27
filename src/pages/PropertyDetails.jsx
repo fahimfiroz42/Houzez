@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Loading from '../components/shared/Loading';
 import { AuthContext } from '../AuthPovider/AuthPovider';
+import useAxiosSecure from '../hooks/useAxiosSecure';
 
 
 const PropertyDetails = () => {
@@ -14,6 +15,7 @@ const PropertyDetails = () => {
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(5);
   const {user}=useContext(AuthContext)
+  const axiosSecure=useAxiosSecure()
 
 const features=[
           "5 Bedrooms",
@@ -29,7 +31,7 @@ const features=[
   const {data:property,isLoading}=useQuery({
     queryKey:['property'],
     queryFn: async () => {
-        const {data}=await axios.get(`https://houzez-server.vercel.app/propertie/${id}`)
+        const {data}=await axiosSecure.get(`/propertie/${id}`)
         return data
   }
   
@@ -40,7 +42,7 @@ const features=[
 const {data:reviews,refetch}=useQuery({
   queryKey:['reviews'],
   queryFn: async () => {
-      const {data}=await axios.get(`https://houzez-server.vercel.app/review/${id}`)
+      const {data}=await axios.get(`http://localhost:9000/review/${id}`)
       return data
 }
 
@@ -63,7 +65,7 @@ if(isLoading){
         return toast.error('You cannot add your own property to wishlist!')
     }
     const { _id, ...propertyWithoutId } = property;
-    const {data}= await axios.post('https://houzez-server.vercel.app/wishlist',{...propertyWithoutId ,
+    const {data}= await axios.post('http://localhost:9000/wishlist',{...propertyWithoutId ,
       userEmail:user?.email,
       userName:user?.displayName,
       userPhoto:user?.photoURL,
@@ -94,7 +96,7 @@ if(isLoading){
     };
 
     try{
-        const {data}=await axios.post('https://houzez-server.vercel.app/reviews',reviewData)
+        const {data}=await axios.post('http://localhost:9000/reviews',reviewData)
         if(data.insertedId){
           toast.success('Review submitted successfully!');
         }
@@ -143,7 +145,7 @@ if(isLoading){
         </div>
 
         {/* Property Images */}
-        <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
           <img
             src={property.photoURL}
             alt={property.title}
@@ -153,7 +155,7 @@ if(isLoading){
         </div>
 
         {/* Property Details */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           <div className="md:col-span-2">
             <div className="bg-white rounded-lg shadow-md p-6 mb-8">
               <h2 className="text-2xl font-bold mb-4">Description</h2>

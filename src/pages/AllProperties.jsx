@@ -13,23 +13,28 @@ const AllProperties = () => {
   
 
   const {data:properties,isLoading,refetch}=useQuery({
-    queryKey:['properties'],
+    queryKey:['properties',searchLocation,sortOrder],
     queryFn: async () => {
-        const {data}=await axios.get(`https://houzez-server.vercel.app/properties?verify=verified&search=${searchLocation}&sortByPrice=${sortOrder}`)
+        const {data}=await axios.get(`http://localhost:9000/properties?verify=verified&search=${searchLocation}&sortByPrice=${sortOrder}`)
         return data
   }
   
 }
 )
 
-if(isLoading){
-    return <Loading/>
-}
+// if(isLoading){
+//     return <Loading/>
+// }
 
 
 const handleSearch = (e) => {
-    setSearchLocation(e.target.value); 
-    refetch()
+     if(e.target.value === ''){ 
+      setSearchLocation('') 
+      return refetch()
+      
+    }
+     setSearchLocation(e.target.value); 
+     return refetch()
   };
 
   const handleSortChange = (e) => {

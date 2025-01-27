@@ -80,7 +80,7 @@ const AddProperty = () => {
       };
   
 
-      const { data: propertyResponse } = await axios.post('https://houzez-server.vercel.app/properties', updatedData);
+      const { data: propertyResponse } = await axios.post('http://localhost:9000/properties', updatedData);
   
       if (propertyResponse.insertedId) {
         toast.success('Property added successfully');

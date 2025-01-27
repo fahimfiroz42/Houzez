@@ -9,7 +9,7 @@ const Advertisement = () => {
         const {data:featuredProperties,isLoading}=useQuery({
         queryKey:['featuredProperties'],
         queryFn: async () => {
-            const {data}=await axios.get(`https://houzez-server.vercel.app/properties?isAdvertised=true`)
+            const {data}=await axios.get(`http://localhost:9000/properties?isAdvertised=true`)
             return data
       }
       

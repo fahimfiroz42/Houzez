@@ -14,16 +14,16 @@ const ParallaxSection = () => {
       <div className="absolute inset-0 bg-blue-900 bg-opacity-50"></div>
 
       {/* Content */}
-      <div className="relative flex flex-col items-center justify-center h-full text-center text-white px-4">
+      <div className="relative flex flex-col items-center md:h-full  justify-center  text-center text-white px-4">
         <h2 className="text-3xl font-semibold">
-          Houzez offers a wide range of drag-and-drop widgets
+          Houzez offers a wide range of services
         </h2>
         <p className="text-lg mt-2">
           to assist you in designing your pages
         </p>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8 max-w-4xl">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 max-w-4xl">
           {/* Looking to Buy */}
           <div className="bg-blue-800 bg-opacity-70 p-6 rounded-lg hover:bg-opacity-90 transition">
             <DollarSign className="text-white mx-auto mb-4" size={32} />

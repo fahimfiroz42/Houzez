@@ -193,14 +193,14 @@ const DashboardLayout = () => {
         </aside>
 
         {/* Main content */}
-        <div className="flex-1 ">
-          <header className="bg-white shadow-sm lg:hidden">
-            <div className="px-4 py-2">
+        <div className="flex-1   ">
+          <header className="bg-white shadow-sm lg:hidden ">
+            <div className="px-4 py-2 flex items-center justify-end ">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2 rounded-md hover:bg-gray-100"
+                className="p-2 rounded-md hover:bg-gray-100 a"
               >
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
+                {isOpen ? <X size={24} className=""  /> : <Menu size={24} />}
               </button>
             </div>
           </header>

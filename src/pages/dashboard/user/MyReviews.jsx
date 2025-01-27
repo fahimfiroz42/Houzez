@@ -41,7 +41,7 @@ const MyReviews = () => {
   
       if (result.isConfirmed) {
     
-        const { data } = await axios.delete(`https://houzez-server.vercel.app/reviews/${id}`);
+        const { data } = await axios.delete(`http://localhost:9000/reviews/${id}`);
         if (data.deletedCount > 0) {
           Swal.fire({
             title: "Deleted!",

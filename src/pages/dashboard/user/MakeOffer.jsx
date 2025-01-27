@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../../AuthPovider/AuthPovider";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+
 import useRole from "../../../hooks/useRole";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Loading from "../../../components/shared/Loading";
@@ -18,30 +18,12 @@ const MakeOffer = () => {
   const [offerAmount, setOfferAmount] = useState("");
   const [buyingDate, setBuyingDate] = useState("");
 
-//   const properties=[
-//     {
-//         id: 1,
-//         image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
-//         title: "Luxury Villa with Pool",
-//         location: "Beverly Hills, CA",
-//         price: {
-//           min: 2500000,
-//           max: 3000000
-//         },
-//         verified: true,
-//         agent: {
-//           name: "John Doe",
-//           image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3"
-//         }
-//       }
-
-//   ]
 
 
   const {data:property,isLoading}=useQuery({
     queryKey:['property'],
     queryFn: async () => {
-        const {data}=await axios.get(`https://houzez-server.vercel.app/wishlists/${id}`)
+        const {data}=await axiosSecure.get(`/wishlists/${id}`)
         return data
   }
   

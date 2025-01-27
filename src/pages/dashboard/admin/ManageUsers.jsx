@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Shield, UserPlus, AlertTriangle, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+
 import Loading from '../../../components/shared/Loading';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
@@ -39,19 +39,26 @@ const ManageUsers = () => {
     } 
   };
 
-  const handleMarkAsFraud = (id) => {
-    setUsers(
-      users.map((user) =>
-        user.id === id ? { ...user, isFraud: true } : user
-      )
-    );
-    toast.success('User marked as fraud');
+  const handleMarkAsFraud = async (id) => {
+    // Implement logic to mark user as fraud
+    try{
+       const {data}= axiosSecure.patch(`/user/fraud/${id}`,{isFraud:true})
+       if(data.modifiedCount>0){ 
+        toast.success('User marked as fraud');
+        refetch()
+       } 
+    }
+    catch(error){
+      console.log(error)
+    }
+   
   };
 
   const handleDeleteUser =async (id) => {
-    const {data}= await axiosSecure.delete(`/user/${id}`)
-    if(data.deletedCount>0){
-      toast.success('User deleted successfully');
+    const {data}= await axiosSecure.delete(`/users/delete/${id}`)
+    console.log(data);
+    if(data.message){
+      toast.success(data.message);
       refetch()
     }
   };
@@ -61,7 +68,7 @@ const ManageUsers = () => {
       <h1 className="text-2xl font-bold mb-6">Manage Users</h1>
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 ">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

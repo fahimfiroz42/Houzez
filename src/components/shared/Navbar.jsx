@@ -1,26 +1,31 @@
-import { Home, Building2, LayoutDashboard, LogOut } from 'lucide-react';
-import { useContext } from 'react';
+import { Home, Building2, LayoutDashboard, LogOut, Menu } from 'lucide-react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../AuthPovider/AuthPovider';
 
 const Navbar = () => {
+  const { user, signOutUser } = useContext(AuthContext);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const {user,signOutUser}=useContext(AuthContext)
+  const handleLogOut = () => {
+    signOutUser()
+      .then(() => {
+        // Handle successful logout
+      })
+      .catch((error) => {
+        console.error('Logout error:', error);
+      });
+  };
 
-    const handleLogOut = () => {
-        signOutUser()
-          .then(() => {
-            // Handle successful logout
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
-          })
-          .catch((error) => {
-            console.error('Logout error:', error);
-          });
-      };
-    return (
-        <nav className="bg-white shadow-lg">
+  return (
+    <nav className="bg-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
+          {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <Building2 className="h-8 w-8 text-blue-500" />
@@ -28,6 +33,7 @@ const Navbar = () => {
             </Link>
           </div>
 
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             <Link
               to="/"
@@ -54,7 +60,8 @@ const Navbar = () => {
             )}
           </div>
 
-          <div className="flex items-center space-x-4">
+          {/* Mobile Menu Button */}
+          <div className="flex  items-center space-x-4">
             {user ? (
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
@@ -65,11 +72,11 @@ const Navbar = () => {
                       className="h-8 w-8 rounded-full"
                     />
                   )}
-                  <span className="text-gray-700">{user.displayName}</span>
+                  <span className="text-gray-700  ">{user.displayName}</span>
                 </div>
                 <button
                   onClick={handleLogOut}
-                  className="flex items-center space-x-1 text-gray-700 hover:text-red-500"
+                  className="hidden md:flex items-center space-x-1 text-gray-700 hover:text-red-500"
                 >
                   <LogOut className="h-5 w-5" />
                   <span>Logout</span>
@@ -84,10 +91,82 @@ const Navbar = () => {
               </Link>
             )}
           </div>
+          
+
+          {/* User Options */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={toggleMobileMenu}
+              className="text-gray-700 hover:text-blue-500 focus:outline-none"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
+         
         </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden flex flex-col space-y-4 mt-4">
+            <Link
+              to="/"
+              className="flex items-center space-x-1 text-gray-700 hover:text-blue-500"
+              onClick={toggleMobileMenu}
+            >
+              <Home className="h-5 w-5" />
+              <span>Home</span>
+            </Link>
+            <Link
+              to="/all-properties"
+              className="flex items-center space-x-1 text-gray-700 hover:text-blue-500"
+              onClick={toggleMobileMenu}
+            >
+              <Building2 className="h-5 w-5" />
+              <span>All Properties</span>
+            </Link>
+            {user && (
+              <Link
+                to="/dashboard"
+                className="flex items-center space-x-1 text-gray-700 hover:text-blue-500"
+                onClick={toggleMobileMenu}
+              >
+                <LayoutDashboard className="h-5 w-5" />
+                <span>Dashboard</span>
+              </Link>
+            )}
+            {user ? (
+
+              <>
+
+           
+              <button
+                onClick={() => {
+                  handleLogOut();
+                  toggleMobileMenu();
+                }}
+                className="flex items-center space-x-1 text-gray-700 hover:text-red-500"
+              >
+                <LogOut className="h-5 w-5" />
+                <span>Logout</span>
+              </button> 
+              
+              
+              </>
+              
+            ) : (
+              <Link
+                to="/login"
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                onClick={toggleMobileMenu}
+              >
+                Login
+              </Link>
+            )}
+          </div>
+        )}
       </div>
     </nav>
-    );
+  );
 };
 
 export default Navbar;
