@@ -4,6 +4,7 @@ import { Menu, X } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../AuthPovider/AuthPovider';
 import useRole from '../hooks/useRole';
+import logo from '../../public/agreement.png'
 
 const DashboardLayout = () => {
   const { user } = useContext(AuthContext);
@@ -20,11 +21,13 @@ const DashboardLayout = () => {
         <aside
           className={`${
             isOpen ? 'translate-x-0' : '-translate-x-full'
-          } fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static`}
+          } fixed  inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static`}
         >
-          <div className="min-h-screen flex flex-col ">
-            <div className="p-4 border-b">
+          <div className="min-h-screen flex flex-col  ">
+            <div className="p-4 border-b flex items-center justify-between">
               <h2 className="text-xl font-semibold">Dashboard</h2>
+
+              <img src={logo} alt="" className='w-10 h-10' />
             </div>
             <nav className="flex-1 p-4 space-y-2">
               {role === 'user' && (

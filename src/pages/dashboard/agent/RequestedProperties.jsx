@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Check, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
 import Loading from '../../../components/shared/Loading';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
@@ -11,26 +11,7 @@ const RequestedProperties = () => {
   const {user}=useContext(AuthContext)
 
   const axiosSecure =useAxiosSecure()
-  // const [requests, setRequests] = useState([
-  //   {
-  //     id: 1,
-  //     title: "Luxury Villa with Pool",
-  //     location: "Beverly Hills, CA",
-  //     buyerEmail: "buyer@example.com",
-  //     buyerName: "John Smith",
-  //     offeredPrice: 2750000,
-  //     status: 'pending'
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Modern Downtown Apartment",
-  //     location: "Manhattan, NY",
-  //     buyerEmail: "buyer2@example.com",
-  //     buyerName: "Sarah Johnson",
-  //     offeredPrice: 925000,
-  //     status: 'pending'
-  //   }
-  // ]);
+ 
 
   const {data:requests,isLoading,refetch}=useQuery({
     queryKey:['requests'],
