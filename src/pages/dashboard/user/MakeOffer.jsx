@@ -4,11 +4,16 @@ import toast from "react-hot-toast";
 import { AuthContext } from "../../../AuthPovider/AuthPovider";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import useRole from "../../../hooks/useRole";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Loading from "../../../components/shared/Loading";
 
 const MakeOffer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const {user}=useContext(AuthContext)
+  const axiosSecure=useAxiosSecure()
+  const [role]=useRole()
  
   const [offerAmount, setOfferAmount] = useState("");
   const [buyingDate, setBuyingDate] = useState("");
@@ -43,22 +48,22 @@ const MakeOffer = () => {
 }
 )
  
+if(isLoading){
+  return <Loading/>
+}
 
 const {priceRange}=property||{}
-
-
-//   const property = properties.find((p) => p.id === parseInt(id));
-//   if (!property) {
-//     return <p>Property not found</p>;
-//   }
+  if (!property) {
+    return <p>Property not found</p>;
+  }
 
 
   const handleOfferSubmit =async () => {
     // Validation for user role
-    // if (user.role !== "buyer") {
-    //   toast.error("Only buyers can make offers!");
-    //   return;
-    // }
+    if (role !== "user") {
+      toast.error("Only users can make offers!");
+      return;
+    }
 
     // Validate offer amount
     if (offerAmount < priceRange?.min || offerAmount > priceRange?.max) {
@@ -85,7 +90,7 @@ const {priceRange}=property||{}
       status: "pending",
     };
   
-   const {data}= await axios.post(`https://houzez-server.vercel.app/offers`,offerData)
+   const {data}= await axiosSecure.post(`/offers`,offerData)
    if(data.insertedId){ 
       toast.success('Offer submitted successfully');
     }

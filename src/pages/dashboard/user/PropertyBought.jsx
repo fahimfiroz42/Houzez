@@ -8,38 +8,16 @@ import Loading from '../../../components/shared/Loading';
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 import CheckoutForm from '../../../components/shared/CheckoutForm';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const stripePromise=loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
 const PropertyBought = () => {
 
     const {user}=useContext(AuthContext)
-//   const [properties, setProperties] = useState([
-//     {
-//       id: 1,
-//       image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
-//       title: "Luxury Villa with Pool",
-//       location: "Beverly Hills, CA",
-//       offeredAmount: 2750000,
-//       status: 'accepted',
-//       agent: {
-//         name: "John Doe",
-//         image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3"
-//       }
-//     },
-//     {
-//       id: 2,
-//       image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3",
-//       title: "Modern Downtown Apartment",
-//       location: "Manhattan, NY",
-//       offeredAmount: 900000,
-//       status: 'pending',
-//       agent: {
-//         name: "Jane Smith",
-//         image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3"
-//       }
-//     }
-//   ]);
+    const axiosSecure=useAxiosSecure()
+    
+
 
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -54,7 +32,7 @@ const PropertyBought = () => {
   const {data:properties,isLoading,refetch}=useQuery({
     queryKey:['properties'],
     queryFn: async () => {
-        const {data}=await axios.get(`https://houzez-server.vercel.app/offers/${user?.email}`)
+        const {data}=await axiosSecure.get(`/offers/${user?.email}`)
         return data
   }
   
@@ -74,9 +52,7 @@ if(isLoading){
 
   const handleSubmitPayment = (e) => {
     e.preventDefault();
-    // Here you would typically integrate with a payment processor
-    
-    // For demo purposes, we'll just show a success message and update the status
+   
     setProperties(properties?.map(prop => 
       prop.id === selectedProperty.id 
         ? { ...prop, status: 'bought', transactionId: 'TXN' + Date.now() } 

@@ -6,17 +6,20 @@ import { useNavigate } from 'react-router-dom';
 import Loading from '../../../components/shared/Loading';
 import axios from 'axios';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import Swal from 'sweetalert2';
 
 const Wishlist = () => {
 
     const navigate =useNavigate()
+    const axiosSecure =useAxiosSecure()
 
     const {user}=useContext(AuthContext)
 
-  const {data:wishlistItems,isLoading}=useQuery({
+  const {data:wishlistItems,isLoading,refetch}=useQuery({
     queryKey:['wishlistItems'],
     queryFn: async () => {
-        const {data}=await axios.get(`https://houzez-server.vercel.app/wishlist/${user?.email}`)
+        const {data}=await axiosSecure.get(`/wishlist/${user?.email}`)
         return data
   }
   
@@ -29,9 +32,45 @@ if(isLoading){
 
 
 
-  const handleRemove = (id) => {
+  const handleRemove =async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      });
+  
+      if (result.isConfirmed) {
+    
+        const { data } = await axiosSecure.delete(`/wishlist/${id}`);
+        if (data.deletedCount > 0) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your item has been deleted.",
+            icon: "success"
+          });
+          refetch();
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Failed to delete the item.",
+            icon: "error"
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting the review:", error);
+      Swal.fire({
+        title: "Error",
+        text: "An unexpected error occurred.",
+        icon: "error"
+      });
+    }
    
-    toast.success('Removed from wishlist');
   
   };
 
@@ -98,7 +137,7 @@ if(isLoading){
                     Make Offer
                   </button>
                   <button
-                    onClick={() => handleRemove(item.id)}
+                    onClick={() => handleRemove(item._id)}
                     className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
                   >
                     <Trash2 className="w-4 h-4" />

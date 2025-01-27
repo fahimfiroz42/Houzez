@@ -5,9 +5,12 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
 import Loading from '../../../components/shared/Loading';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 const RequestedProperties = () => {
-
+  
   const {user}=useContext(AuthContext)
+
+  const axiosSecure =useAxiosSecure()
   // const [requests, setRequests] = useState([
   //   {
   //     id: 1,
@@ -32,7 +35,7 @@ const RequestedProperties = () => {
   const {data:requests,isLoading,refetch}=useQuery({
     queryKey:['requests'],
     queryFn: async () => {
-        const {data}=await axios.get(`https://houzez-server.vercel.app/offers?email=${user?.email}`)
+        const {data}=await axiosSecure.get(`/offers?email=${user?.email}`)
         return data
   }
   
@@ -50,7 +53,7 @@ if(isLoading){
 
     try {
 
-      const { data } = await axios.patch(`https://houzez-server.vercel.app/offers/${id}/accept`, {
+      const { data } = await axiosSecure.patch(`/offers/${id}/accept`, {
         propertyId,
       });
 
@@ -68,7 +71,7 @@ if(isLoading){
   const handleReject = async (id,propertyId) => {
     try {
 
-      const { data } = await axios.patch(`https://houzez-server.vercel.app/offers/${id}/reject`, {
+      const { data } = await axiosSecure.patch(`/offers/${id}/reject`, {
         propertyId,
       });
 

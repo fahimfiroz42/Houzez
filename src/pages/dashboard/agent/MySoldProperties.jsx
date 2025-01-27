@@ -2,19 +2,21 @@ import React, { useContext, useState } from 'react';
 import { DollarSign } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import Loading from '../../../components/shared/Loading';
-import axios from 'axios';
+
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const MySoldProperties = () => {
-
+ 
   const {user}=useContext(AuthContext)
+  const axiosSecure =useAxiosSecure()
   
 
  
   const {data:soldProperties,isLoading}=useQuery({
     queryKey:['soldProperties'],
     queryFn: async () => {
-        const {data}=await axios.get(`https://houzez-server.vercel.app/offers?email=${user?.email}&status=bought`)
+        const {data}=await axiosSecure.get(`/offers?email=${user?.email}&status=bought`)
         return data
   }
   

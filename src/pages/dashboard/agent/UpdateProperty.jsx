@@ -6,9 +6,13 @@ import toast from 'react-hot-toast';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+
 
 const UpdateProperty = () => {
+
   const { user } = useContext(AuthContext);
+  const axiosSecure =useAxiosSecure()
   const { id } = useParams(); 
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState(null);
@@ -26,7 +30,7 @@ const UpdateProperty = () => {
    
     const fetchPropertyData = async () => {
       try {
-        const { data } = await axios.get(`https://houzez-server.vercel.app/propertie/${id}`);
+        const { data } = await axiosSecure.get(`/propertie/${id}`);
         setInitialData(data);
         setImagePreview(data.photoURL);
         setValue('title', data.title);
@@ -83,8 +87,8 @@ const UpdateProperty = () => {
           max: priceMax,
         },
       };
-      const { data: updateResponse } = await axios.patch(
-        `https://houzez-server.vercel.app/property/${id}`,
+      const { data: updateResponse } = await axiosSecure.patch(
+        `/property/${id}`,
         updatedData
       );
 

@@ -6,14 +6,16 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
 import { format } from 'date-fns';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const MyReviews = () => {
  const {user}=useContext(AuthContext)
+ const axiosSecure =useAxiosSecure()
 
   const {data:reviews,refetch}=useQuery({
     queryKey:['reviews'],
     queryFn: async () => {
-        const {data}=await axios.get(`https://houzez-server.vercel.app/allreviews/${user?.email}`)
+        const {data}=await axiosSecure.get(`/allreviews/${user?.email}`)
         return data
   }
   
@@ -38,17 +40,14 @@ const MyReviews = () => {
       });
   
       if (result.isConfirmed) {
-        // Wait for the delete request to complete
+    
         const { data } = await axios.delete(`https://houzez-server.vercel.app/reviews/${id}`);
-  
-        // Check if the deletion was successful
         if (data.deletedCount > 0) {
           Swal.fire({
             title: "Deleted!",
             text: "Your review has been deleted.",
             icon: "success"
           });
-          // Refetch the data to reflect changes
           refetch();
         } else {
           Swal.fire({

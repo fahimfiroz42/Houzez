@@ -3,19 +3,21 @@ import { MapPin, DollarSign, Shield, Pencil, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
 import Loading from '../../../components/shared/Loading';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const MyAddedProperties = () => {
     const {user}=useContext(AuthContext)
+    const axiosSecure =useAxiosSecure()
  
 
   const {data:properties,isLoading,refetch}=useQuery({
     queryKey:['properties'],
     queryFn: async () => {
-        const {data}=await axios.get(`https://houzez-server.vercel.app/property/${user?.email}`)
+        const {data}=await axiosSecure.get(`/property/${user?.email}`)
         return data
   }
   
@@ -41,7 +43,7 @@ if(isLoading){
   
       if (result.isConfirmed) {
       
-        const { data } = await axios.delete(`https://houzez-server.vercel.app/properties/${id}`);
+        const { data } = await axiosSecure.delete(`/properties/${id}`);
   
         if (data.deletedCount > 0) {
           Swal.fire({
