@@ -111,6 +111,13 @@ Welcome to the Real Estate Platform, a feature-rich application built using the 
    ```bash
    git clone [repository_url]
 
+2. **Install dependencies:**
+   ```bash
+   npm install
+3. **Start the development server:**
+   ```bash
+   npm run dev
+
 
 ## 🛠️ Technologies Used
 
