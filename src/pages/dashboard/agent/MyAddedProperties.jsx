@@ -80,6 +80,8 @@ if(isLoading){
         return <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">Verified</span>;
       case 'rejected':
         return <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-sm">Rejected</span>;
+      case 'unverified':
+          return <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-sm">Rejected</span>;
       default:
         return null;
     }
@@ -123,7 +125,7 @@ if(isLoading){
                 </span>
               </div>
               <div className="flex gap-2">
-                {property.verificationStatus !== 'rejected' && (
+                {property.verificationStatus !== 'rejected' && property.verificationStatus !== 'unverified' && (
                   <Link
                     to={`/dashboard/agent/update-property/${property._id}`}
                     className="flex-1 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex items-center justify-center"

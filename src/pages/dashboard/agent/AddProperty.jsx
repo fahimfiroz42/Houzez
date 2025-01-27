@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { AuthContext } from '../../../AuthPovider/AuthPovider';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 
 const AddProperty = () => {
@@ -13,6 +14,9 @@ const AddProperty = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
   const navigate = useNavigate();
+  const axiosSecure=useAxiosSecure()
+
+
 
   const {
     register,
@@ -30,6 +34,9 @@ const AddProperty = () => {
   };
 
   const onSubmit = async (data) => {
+
+    
+
     if (!selectedImage) {
       toast.error('Please select an image');
       return;
@@ -80,14 +87,21 @@ const AddProperty = () => {
       };
   
 
-      const { data: propertyResponse } = await axios.post('http://localhost:9000/properties', updatedData);
+      const { data:propertyResponse} = await axiosSecure.post('/properties', updatedData);
+      console.log(propertyResponse);
   
-      if (propertyResponse.insertedId) {
-        toast.success('Property added successfully');
-        navigate(`/dashboard/agent/my-properties`);
+      if (propertyResponse.message) {
+        
+        toast.error(propertyResponse.message);
+        return;
       }
+     if(propertyResponse.insertedId){
+      toast.success('Property added successfully!');
+      navigate(`/dashboard/agent/my-properties`);
+     }
+      
     } catch (error) {
-      console.error('Error:', error.response?.data || error.message);
+      toast.error('Error:', error.response?.data || error.message);
       toast.error('An error occurred while submitting the property.');
     }
   };
