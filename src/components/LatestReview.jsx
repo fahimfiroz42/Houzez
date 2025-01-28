@@ -10,7 +10,7 @@ const LatestReview = () => {
       const {data:latestReviews,isLoading}=useQuery({
         queryKey:['latestReviews'],
         queryFn: async () => {
-            const {data}=await axios.get(`http://localhost:9000/reviews`)
+            const {data}=await axios.get(`https://houzez-server.vercel.app/reviews`)
             return data
       }
       

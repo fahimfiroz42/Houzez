@@ -42,7 +42,7 @@ const features=[
 const {data:reviews,refetch}=useQuery({
   queryKey:['reviews'],
   queryFn: async () => {
-      const {data}=await axios.get(`http://localhost:9000/review/${id}`)
+      const {data}=await axios.get(`https://houzez-server.vercel.app/review/${id}`)
       return data
 }
 
@@ -65,7 +65,7 @@ if(isLoading){
         return toast.error('You cannot add your own property to wishlist!')
     }
     const { _id, ...propertyWithoutId } = property;
-    const {data}= await axios.post('http://localhost:9000/wishlist',{...propertyWithoutId ,
+    const {data}= await axios.post('https://houzez-server.vercel.app/wishlist',{...propertyWithoutId ,
       userEmail:user?.email,
       userName:user?.displayName,
       userPhoto:user?.photoURL,
@@ -96,7 +96,7 @@ if(isLoading){
     };
 
     try{
-        const {data}=await axios.post('http://localhost:9000/reviews',reviewData)
+        const {data}=await axiosSecure.post('/reviews',reviewData)
         if(data.insertedId){
           toast.success('Review submitted successfully!');
         }

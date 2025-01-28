@@ -66,7 +66,7 @@ const userDelete=()=>{
                 if (currentUser) {
                     // get token and store client
                     const userInfo = { email: currentUser?.email };
-                    axios.post(' http://localhost:9000/jwt', userInfo)
+                    axios.post(' https://houzez-server.vercel.app/jwt', userInfo)
                         .then(res => {
                             if (res.data.token) {
                                 localStorage.setItem('access-token', res.data.token);

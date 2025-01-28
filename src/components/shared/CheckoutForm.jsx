@@ -7,10 +7,13 @@ import { useEffect, useState } from 'react';
 import { use } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const CheckoutForm = ({purchaseInfo, refetch}) => {
   const stripe = useStripe();
   const elements = useElements();
+  const axiosSecure = useAxiosSecure();
+  
   
   const [clientSecret, setClientSecret] = useState('');
   useEffect(() => {
@@ -19,7 +22,7 @@ const CheckoutForm = ({purchaseInfo, refetch}) => {
 
   const getPaymentIntent = async () => {
     try {
-        const {data}=await axios.post(`http://localhost:9000/create-payment-intent`,{
+        const {data}=await axios.post(`https://houzez-server.vercel.app/create-payment-intent`,{
         offerAmount:purchaseInfo?.offerAmount 
         })
         setClientSecret(data.clientSecret);
@@ -82,7 +85,7 @@ const CheckoutForm = ({purchaseInfo, refetch}) => {
       if(paymentIntent.status === 'succeeded'){
         try {
 
-        const { data } = await axios.patch(`http://localhost:9000/offers/${purchaseInfo?._id}/bought`, {
+        const { data } = await axiosSecure.patch(`/offers/${purchaseInfo?._id}/bought`, {
               transactionId: paymentIntent?.id
             });
       

@@ -41,7 +41,7 @@ const MyReviews = () => {
   
       if (result.isConfirmed) {
     
-        const { data } = await axios.delete(`http://localhost:9000/reviews/${id}`);
+        const { data } = await axiosSecure.delete(`/reviews/${id}`);
         if (data.deletedCount > 0) {
           Swal.fire({
             title: "Deleted!",
