@@ -7,7 +7,7 @@ import useRole from '../../../hooks/useRole';
 const UserProfile = () => {
   const [role]=useRole()
   const { user } = useContext(AuthContext);
-  console.log(user);
+
 
   return (
     <div className="max-w-4xl mx-auto p-6">

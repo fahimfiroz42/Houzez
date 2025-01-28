@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import Loading from '../../../components/shared/Loading';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import axios from 'axios';
 
 const ManageUsers = () => {
 
@@ -42,21 +43,25 @@ const ManageUsers = () => {
   const handleMarkAsFraud = async (id) => {
     // Implement logic to mark user as fraud
     try{
-       const {data}= axiosSecure.patch(`/user/fraud/${id}`,{isFraud:true})
-       if(data.modifiedCount>0){ 
-        toast.success('User marked as fraud');
+       const {data} = await axiosSecure.patch(`/user/fraud/${id}`,{isFraud:true})
+      
+       if(data && data?.message){ 
+        toast.success(data.message);
         refetch()
+        
        } 
     }
     catch(error){
-      console.log(error)
+  
+      toast.error('Failed to mark user as fraud');
     }
+
+   
    
   };
 
   const handleDeleteUser =async (id) => {
     const {data}= await axiosSecure.delete(`/users/delete/${id}`)
-    console.log(data);
     if(data.message){
       toast.success(data.message);
       refetch()

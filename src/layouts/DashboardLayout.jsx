@@ -11,7 +11,7 @@ const DashboardLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const [role,isLoading]=useRole()
-  console.log(role);
+ 
 
 
   return (
