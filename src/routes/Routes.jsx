@@ -26,6 +26,7 @@ import PrivateRoute from './PrivateRoutes';
 import AgentRoute from './AgentRoute';
 import AdminRoute from './AdminRoute';
 import UpdateProperty from '../pages/dashboard/agent/UpdateProperty';
+import Contact from '../pages/Contact';
 
 const Routes = createBrowserRouter([
     {
@@ -45,6 +46,13 @@ const Routes = createBrowserRouter([
             path:'/register',
             element:<Register/>
         },
+        
+        {
+         path:'/contact',
+         element:<Contact/>
+
+        },
+        
         {
             path:'/property/:id',
             element:<PrivateRoute><PropertyDetails/></PrivateRoute>
