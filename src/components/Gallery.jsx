@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const GridSection = () => {
   const properties = [
@@ -82,11 +83,11 @@ const GridSection = () => {
               <div className="absolute inset-0 bg-black bg-opacity-50"></div>
               {/* Content */}
               <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center">
-                <p className="text-md mb-2">{property.propertiesCount} Properties</p>
+                <p className="text-lg font-semibold mb-2">{property.propertiesCount} Properties</p>
                 <h3 className="text-3xl font-semibold">{property.title}</h3>
-                <button className="text-md font-medium mt-4 flex items-center gap-1 group-hover:underline">
+                <Link to={'/all-properties'} className="text-md font-medium mt-4 flex items-center gap-1 group-hover:underline">
                   More Details <span>&#9654;</span>
-                </button>
+                </Link>
               </div>
             </div>
           ))}

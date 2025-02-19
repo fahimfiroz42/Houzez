@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 const agents = [
   {
@@ -29,7 +30,7 @@ const agents = [
 const MeetOurAgents = () => {
   return (
     <section className="py-12 bg-gray-100">
-      <div className="max-w-6xl mx-auto text-center">
+      <div className="container mx-auto text-center">
         <h2 className="text-3xl font-bold text-gray-800">Meet Our Agents</h2>
         <p className="text-gray-600 mt-2">
           We are a team of experienced professionals dedicated <br /> to helping you find
@@ -52,12 +53,12 @@ const MeetOurAgents = () => {
               </h3>
               <p className="text-gray-500 text-sm mt-1">{agent.position}</p>
               <p className="text-gray-600 mt-2 text-sm">{agent.description}</p>
-              <a
-                href={agent.profileLink}
+              <Link
+                to={'/'}
                 className="text-blue-500 font-semibold mt-4 inline-block"
               >
                 View Profile
-              </a>
+              </Link>
             </div>
           ))}
         </div>
