@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
-import { Globe, Home, Menu, TrendingUpDown, X } from 'lucide-react';
+import { Globe, Home, House, Menu, Star, TrendingUpDown, User, UserPen, X } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../AuthPovider/AuthPovider';
 import useRole from '../hooks/useRole';
@@ -137,42 +137,67 @@ const DashboardLayout = () => {
                 <>
                   <Link
                     to="/dashboard/admin/profile"
-                    className={`block p-2 rounded ${
+                    className={`flex p-2 rounded ${
                       location.pathname === '/dashboard/admin/profile'
                         ? 'bg-blue-500 text-white'
                         : 'hover:bg-gray-100'
                     }`}
                   >
+                   <User className={`w-5 h-5 mr-2 text-blue-500 ${
+                      location.pathname === '/dashboard/admin/manage-properties'
+                        ? 'text-white'
+                        : 'hover:bg-gray-100'
+                    }`}  />
+
+
                     Admin Profile
                   </Link>
                   <Link
                     to="/dashboard/admin/manage-properties"
-                    className={`block p-2 rounded ${
+                    className={`flex items-center p-2 rounded ${
                       location.pathname === '/dashboard/admin/manage-properties'
                         ? 'bg-blue-500 text-white'
                         : 'hover:bg-gray-100'
                     }`}
                   >
+                   <House className={`w-5 h-5 mr-2 text-blue-500 ${
+                      location.pathname === '/dashboard/admin/manage-properties'
+                        ? 'text-white'
+                        : 'hover:bg-gray-100'
+                    }`}  />
+
+
                     Manage Properties
                   </Link>
                   <Link
                     to="/dashboard/admin/manage-users"
-                    className={`block p-2 rounded ${
+                    className={`flex items-center p-2 rounded ${
                       location.pathname === '/dashboard/admin/manage-users'
                         ? 'bg-blue-500 text-white'
                         : 'hover:bg-gray-100'
                     }`}
                   >
+                    <UserPen className={`w-5 h-5 mr-2 text-blue-500 ${
+                      location.pathname === '/dashboard/admin/manage-users'
+                        ? 'text-white'
+                        : 'hover:bg-gray-100'
+                    }`}  />
+
                     Manage Users
                   </Link>
                   <Link
                     to="/dashboard/admin/manage-reviews"
-                    className={`block p-2 rounded ${
+                    className={`flex items-center p-2 rounded ${
                       location.pathname === '/dashboard/admin/manage-reviews'
                         ? 'bg-blue-500 text-white'
                         : 'hover:bg-gray-100'
                     }`}
                   >
+                    <Star className={`w-5 h-5 mr-2 text-blue-500 ${
+                      location.pathname === '/dashboard/admin/manage-reviews'
+                        ? 'text-white'
+                        : 'hover:bg-gray-100'
+                    }`}  />
                     
 
 
