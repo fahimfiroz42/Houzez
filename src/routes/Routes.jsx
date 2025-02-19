@@ -28,6 +28,7 @@ import AdminRoute from './AdminRoute';
 import UpdateProperty from '../pages/dashboard/agent/UpdateProperty';
 import Contact from '../pages/Contact';
 import PremiumServices from '../pages/PremiumServices';
+import Overview from '../pages/Overview';
 
 const Routes = createBrowserRouter([
     {
@@ -77,7 +78,11 @@ const Routes = createBrowserRouter([
            // User routes
       {
         index: true,
-        element: <PrivateRoute><UserProfile /></PrivateRoute>,
+        element: <PrivateRoute><Overview/></PrivateRoute>,
+      },
+      {
+        path:'overview',
+        element:<PrivateRoute><Overview/></PrivateRoute>,
       },
       {
         path: 'user/profile',

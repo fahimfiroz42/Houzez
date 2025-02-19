@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
-import { Menu, X } from 'lucide-react';
+import { Globe, Home, Menu, TrendingUpDown, X } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../AuthPovider/AuthPovider';
 import useRole from '../hooks/useRole';
@@ -30,6 +30,9 @@ const DashboardLayout = () => {
               <img src={logo} alt="" className='w-10 h-10' />
             </div>
             <nav className="flex-1 p-4 space-y-2">
+
+           
+
               {role === 'user' && (
                 <>
                   <Link
@@ -170,25 +173,55 @@ const DashboardLayout = () => {
                         : 'hover:bg-gray-100'
                     }`}
                   >
+                    
+
+
                     Manage Reviews
                   </Link>
                   <Link
                     to="/dashboard/admin/advertise-property"
-                    className={`block p-2 rounded ${
+                    className={`flex   p-2 rounded ${
                       location.pathname === '/dashboard/admin/advertise-property'
                         ? 'bg-blue-500 text-white'
                         : 'hover:bg-gray-100'
                     }`}
                   >
+                  
+                  <Globe className={`w-5 h-5 mr-2 text-blue-500 ${
+                      location.pathname === '/dashboard/admin/advertise-property'
+                        ? 'text-white'
+                        : 'hover:bg-gray-100'
+                    }`}  />
+
+
+
                     Advertise Property
                   </Link>
                 </>
               )}
+                  
+                  <Link
+                    to="/dashboard/overview"
+                    className={`flex items-center p-2 rounded ${
+                      location.pathname === '/dashboard/overview'
+                        ? 'bg-blue-500 text-white'
+                        : 'hover:bg-gray-100'
+                    }`}
+                  >
+                    <TrendingUpDown className={`w-5 h-5 mr-2 text-blue-500 ${
+                      location.pathname === '/dashboard/overview'
+                        ? 'text-white'
+                        : 'hover:bg-gray-100'
+                    }`}  />
+                    Overview
+                  </Link>
+
 
                   <Link
                     to="/"
-                    className={`block p-2 rounded hover:bg-gray-100 `}
+                    className={`flex items-center  p-2 rounded hover:bg-gray-100 `}
                   >
+                    <Home className='w-5 h-5 mr-2 text-blue-500'/>
                     Home
                   </Link>
             </nav>
