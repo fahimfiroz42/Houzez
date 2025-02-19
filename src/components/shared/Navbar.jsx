@@ -1,4 +1,4 @@
-import { Home, Building2, LayoutDashboard, LogOut, Menu, Contact } from 'lucide-react';
+import { Home, Building2, LayoutDashboard, LogOut, Menu, Contact, Gem } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../AuthPovider/AuthPovider';
@@ -59,6 +59,13 @@ const Navbar = () => {
             >
               <Contact className="h-5 w-5" />
               <span>Contact</span>
+            </Link>
+            <Link
+              to="/premium-services"
+              className="flex items-center space-x-1 text-gray-700 hover:text-blue-500"
+            >
+              <Gem className="h-5 w-5" />
+              <span>Services</span>
             </Link>
 
 

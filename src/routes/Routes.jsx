@@ -27,6 +27,7 @@ import AgentRoute from './AgentRoute';
 import AdminRoute from './AdminRoute';
 import UpdateProperty from '../pages/dashboard/agent/UpdateProperty';
 import Contact from '../pages/Contact';
+import PremiumServices from '../pages/PremiumServices';
 
 const Routes = createBrowserRouter([
     {
@@ -50,6 +51,11 @@ const Routes = createBrowserRouter([
         {
          path:'/contact',
          element:<Contact/>
+
+        },
+        { 
+          path:'/premium-services',
+          element:<PremiumServices/>
 
         },
         
