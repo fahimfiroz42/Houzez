@@ -114,6 +114,8 @@ const Navbar = () => {
           </div>
           
 
+          {/* Mobile Menu */}
+
           {/* User Options */}
           <div className="md:hidden flex items-center">
             <button
