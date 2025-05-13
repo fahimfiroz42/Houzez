@@ -188,6 +188,7 @@ const Navbar = () => {
           </div>
         )}
       </div>
+      {/* color adjustment */}
     </nav>
   );
 };
