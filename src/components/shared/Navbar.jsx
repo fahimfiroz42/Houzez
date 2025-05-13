@@ -93,6 +93,7 @@ const Navbar = () => {
                       className="h-8 w-8 rounded-full"
                     />
                   )}
+                  {/* color change */}
                   <span className="text-gray-700  ">{user.displayName}</span>
                 </div>
                 <button
