@@ -78,12 +78,9 @@ const Routes = createBrowserRouter([
            // User routes
       {
         index: true,
-        element: <PrivateRoute><Overview/></PrivateRoute>,
+        element:<PrivateRoute><UserProfile /></PrivateRoute>,
       },
-      {
-        path:'overview',
-        element:<PrivateRoute><Overview/></PrivateRoute>,
-      },
+      
       {
         path: 'user/profile',
         element: <PrivateRoute><UserProfile /></PrivateRoute>,
@@ -150,7 +147,11 @@ const Routes = createBrowserRouter([
       {
         path: 'admin/advertise-property',
         element :<PrivateRoute> <AdminRoute> <AdvertiseProperty /> </AdminRoute> </PrivateRoute> ,
-      }
+      },
+      {
+        path:'admin/overview',
+        element:<PrivateRoute><AdminRoute><Overview/> </AdminRoute></PrivateRoute>,
+      },
         ]
     }
   ]);

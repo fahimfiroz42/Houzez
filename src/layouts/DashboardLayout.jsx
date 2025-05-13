@@ -222,24 +222,25 @@ const DashboardLayout = () => {
 
                     Advertise Property
                   </Link>
-                </>
-              )}
-                  
                   <Link
-                    to="/dashboard/overview"
+                    to="/dashboard/admin/overview"
                     className={`flex items-center p-2 rounded ${
-                      location.pathname === '/dashboard/overview'
+                      location.pathname === '/dashboard/admin/overview'
                         ? 'bg-blue-500 text-white'
                         : 'hover:bg-gray-100'
                     }`}
                   >
                     <TrendingUpDown className={`w-5 h-5 mr-2 text-blue-500 ${
-                      location.pathname === '/dashboard/overview'
+                      location.pathname === '/dashboard/admin/overview'
                         ? 'text-white'
                         : 'hover:bg-gray-100'
                     }`}  />
                     Overview
                   </Link>
+                </>
+              )}
+                  
+                  
 
 
                   <Link

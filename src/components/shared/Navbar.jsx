@@ -66,6 +66,7 @@ const Navbar = () => {
             >
               <Gem className="h-5 w-5" />
               <span>Services</span>
+              {/* add premium services */}
             </Link>
 
 
